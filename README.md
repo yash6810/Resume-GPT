@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/Status-Active-purple?style=for-the-badge" alt="Status">
 </p>
 
-A comprehensive AI-powered resume analyzer with ATS simulation, resume builder, and job application tracking. Built with FastAPI, spaCy, and sentence-transformers.
+**ResumeGPT** is an AI-powered resume analyzer and ATS booster built with FastAPI, spaCy, and sentence-transformers. A free & open source alternative to Jobscan ($50/mo), Teal ($29/mo), and Rezi ($29/mo).
 
 ## ✨ Features
 
@@ -16,11 +16,11 @@ A comprehensive AI-powered resume analyzer with ATS simulation, resume builder, 
 | **Resume Parsing** | Upload PDF/DOCX resumes, extract text and sections |
 | **ATS Scoring** | Keyword matching, role match, experience relevance, quality analysis |
 | **6 ATS Platforms** | LinkedIn, Indeed, Greenhouse, Glassdoor, Monster, Lever |
-| **A/B Testing** | Compare resume versions, track callback outcomes |
-| **Cover Letter Generator** | AI-powered cover letters (Groq/Gemini/OpenAI) |
-| **Resume Builder** | Build resumes in 7 templates |
-| **Job Tracker** | Track applications with status updates |
-| **Interview Prep** | Generate mock interview questions |
+| **A/B Testing** | Compare resume versions with callback tracking |
+| **AI Cover Letter Generator** | Generate tailored cover letters (Groq/Gemini/OpenAI) |
+| **Resume Builder** | Build resumes in 7 professional templates |
+| **Job Application Tracker** | Track applications with status updates |
+| **Interview Prep Generator** | Generate mock interview questions |
 | **Salary Insights** | Estimate salary ranges |
 
 ## 🚀 Quick Start
