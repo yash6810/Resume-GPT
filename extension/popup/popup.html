@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ResumeGPT Scanner</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <span class="logo">🎯</span>
+      <span class="title">ResumeGPT Scanner</span>
+    </div>
+    <button class="close-btn" id="closeBtn">×</button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <!-- Resume Status -->
+    <div class="card" id="resumeCard">
+      <div class="card-header">
+        <span class="icon">📄</span>
+        <span>Your Resume</span>
+      </div>
+      <div id="resumeStatus" class="status-empty">
+        <div class="empty-state">
+          <span class="big-icon">📄</span>
+          <p>No resume uploaded yet</p>
+        </div>
+      </div>
+      <div id="resumeLoaded" class="status-loaded" style="display: none;">
+        <div class="loaded-info">
+          <span class="check">✅</span>
+          <div>
+            <p class="filename" id="resumeName">resume.pdf</p>
+            <p class="date" id="resumeDate">Uploaded: --</p>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn-outline" id="uploadNewBtn">📁 Upload New</button>
+          <button class="btn-text" id="removeBtn">🗑️ Remove</button>
+        </div>
+      </div>
+      <input type="file" id="resumeInput" accept=".pdf,.docx" style="display: none;">
+    </div>
+
+    <!-- Job Detection -->
+    <div class="card" id="jobCard">
+      <div class="card-header">
+        <span class="icon">🔍</span>
+        <span>Job Description</span>
+      </div>
+      <div class="job-detect">
+        <div class="job-preview" id="jobPreview">
+          <span class="source-badge" id="jobSource">Auto-detect</span>
+          <p id="jobTitle">Detecting job from page...</p>
+          <p class="job-excerpt" id="jobExcerpt"></p>
+        </div>
+        <div class="job-actions">
+          <button class="btn-icon" id="redetectBtn" title="Re-detect">🔄</button>
+          <button class="btn-outline" id="pasteBtn">📋 Paste Manual</button>
+        </div>
+      </div>
+      <textarea id="jobText" placeholder="Paste job description here..." style="display: none;"></textarea>
+    </div>
+
+    <!-- ATS Score -->
+    <div class="card score-card" id="scoreCard" style="display: none;">
+      <div class="card-header">
+        <span class="icon">📊</span>
+        <span>ATS Score</span>
+      </div>
+      <div class="score-display">
+        <div class="score-circle">
+          <svg viewBox="0 0 100 100">
+            <circle class="bg" cx="50" cy="50" r="40"/>
+            <circle class="progress" id="scoreProgress" cx="50" cy="50" r="40"/>
+          </svg>
+          <div class="score-value">
+            <span class="number" id="scoreNumber">0</span>
+            <span class="label">/100</span>
+          </div>
+        </div>
+        <p class="score-status" id="scoreStatus">Analyzing...</p>
+      </div>
+      <div class="score-bar">
+        <div class="bar-fill" id="barFill"></div>
+      </div>
+    </div>
+
+    <!-- Skills -->
+    <div class="card" id="skillsCard" style="display: none;">
+      <div class="skills-section">
+        <h4>✅ Matched Skills (<span id="matchedCount">0</span>)</h4>
+        <div class="skill-badges" id="matchedSkills"></div>
+      </div>
+      <div class="skills-section">
+        <h4>❌ Missing Skills (<span id="missingCount">0</span>)</h4>
+        <div class="skill-badges missing" id="missingSkills"></div>
+      </div>
+    </div>
+
+    <!-- Recommendations -->
+    <div class="card tips-card" id="tipsCard" style="display: none;">
+      <div class="card-header">
+        <span class="icon">💡</span>
+        <span>Quick Tips</span>
+      </div>
+      <ul class="tips-list" id="tipsList"></ul>
+    </div>
+
+    <!-- Analyze Button -->
+    <button class="btn-primary" id="analyzeBtn">
+      <span class="btn-icon">🔍</span>
+      <span>Analyze Resume</span>
+    </button>
+
+    <!-- Loading State -->
+    <div class="loading" id="loadingState" style="display: none;">
+      <div class="spinner"></div>
+      <p>Analyzing your resume...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="error" id="errorState" style="display: none;">
+      <span class="error-icon">⚠️</span>
+      <p id="errorMessage">Could not connect to server</p>
+      <button class="btn-outline" id="retryBtn">🔄 Retry</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>Powered by ResumeGPT</p>
+    <div class="footer-links">
+      <a href="#" id="settingsLink">⚙️ Settings</a>
+      <a href="#" id="aboutLink">ℹ️ About</a>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "job1",
+    "title": "Senior Python Developer",
+    "company": "TechCorp Inc.",
+    "description": "We are looking for a Senior Python Developer to join our team. The ideal candidate should have experience with Python, Django, FastAPI, PostgreSQL, and AWS. You will be responsible for developing and maintaining backend services, designing APIs, and working with cloud infrastructure. Experience with Docker, Kubernetes, and CI/CD pipelines is a plus.",
+    "required_skills": ["Python", "Django", "FastAPI", "PostgreSQL", "AWS", "Docker", "REST API", "Git"],
+    "preferred_skills": ["Kubernetes", "CI/CD", "Redis", "Celery", "GraphQL"]
+  },
+  {
+    "id": "job2",
+    "title": "Full Stack JavaScript Developer",
+    "company": "StartupXYZ",
+    "description": "Join our fast-growing startup as a Full Stack JavaScript Developer. You'll work with React, Node.js, TypeScript, and MongoDB to build scalable web applications. We value candidates with experience in Next.js, GraphQL, and cloud platforms like Vercel or AWS. Strong understanding of testing, code review, and agile methodologies is essential.",
+    "required_skills": ["JavaScript", "TypeScript", "React", "Node.js", "MongoDB", "Git"],
+    "preferred_skills": ["Next.js", "GraphQL", "AWS", "Docker", "Jest", "Cypress"]
+  },
+  {
+    "id": "job3",
+    "title": "Data Scientist",
+    "company": "Analytics Pro",
+    "description": "We're seeking a Data Scientist to help us extract insights from large datasets. You should be proficient in Python, machine learning, and statistical analysis. Experience with TensorFlow or PyTorch, NLP, and big data technologies like Spark is highly valued. You'll work closely with product teams to develop predictive models and data-driven solutions.",
+    "required_skills": ["Python", "Machine Learning", "TensorFlow", "Pandas", "NumPy", "SQL", "Statistics"],
+    "preferred_skills": ["PyTorch", "NLP", "Apache Spark", "Deep Learning", "Computer Vision"]
+  }
+]

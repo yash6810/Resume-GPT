@@ -1,0 +1,208 @@
+{
+  "tech": {
+    "id": "tech",
+    "name": "Technology",
+    "description": "Software Engineering, IT, Data Science, DevOps",
+    "icon": "💻",
+    "suggested_sections": ["summary", "technical_skills", "experience", "projects", "education", "certifications"],
+    "keywords": [
+      "Python", "JavaScript", "TypeScript", "React", "Node.js", "AWS", "Docker", "Kubernetes",
+      "Agile", "Scrum", "CI/CD", "Git", "REST API", "GraphQL", "Microservices", "Cloud",
+      "Machine Learning", "Data Structures", "Algorithms", "System Design", "SQL", "NoSQL"
+    ],
+    "summary_template": "Results-driven {role} with {years}+ years of experience in {skills}. Proven track record of {achievement}. Passionate about {interest}.",
+    "bullet_templates": [
+      "Developed and deployed {system} using {technology}, resulting in {metric}% improvement in {area}",
+      "Led a team of {number} engineers to deliver {project} on time and under budget",
+      "Implemented {feature} that reduced {metric} by {percent}%",
+      "Architected and built {system} handling {scale} requests per day",
+      "Collaborated with cross-functional teams to design and implement {solution}"
+    ],
+    "skills_categories": {
+      "Languages": ["Python", "JavaScript", "TypeScript", "Go", "Java", "Rust"],
+      "Frontend": ["React", "Vue.js", "Angular", "HTML5", "CSS3", "Tailwind CSS"],
+      "Backend": ["Node.js", "Django", "FastAPI", "Spring Boot", "Express.js"],
+      "Cloud/DevOps": ["AWS", "GCP", "Azure", "Docker", "Kubernetes", "Terraform"],
+      "Databases": ["PostgreSQL", "MongoDB", "Redis", "Elasticsearch", "DynamoDB"]
+    },
+    "recommended_certs": [
+      "AWS Solutions Architect",
+      "Google Cloud Professional",
+      "Certified Kubernetes Administrator",
+      "Azure Developer Associate"
+    ],
+    "color_primary": "#2563eb",
+    "color_secondary": "#3b82f6"
+  },
+  "finance": {
+    "id": "finance",
+    "name": "Finance & Banking",
+    "description": "Banking, Investment, Accounting, Financial Analysis",
+    "icon": "💰",
+    "suggested_sections": ["summary", "experience", "education", "certifications", "skills"],
+    "keywords": [
+      "Financial Analysis", "Risk Management", "Portfolio Management", "Excel", "Bloomberg",
+      "SQL", "Python", "R", "Tableau", "Power BI", "GAAP", "IFRS", "Audit", "Compliance",
+      "Derivatives", "Fixed Income", "Equity Research", "Valuation", "M&A", "Due Diligence"
+    ],
+    "summary_template": "Detail-oriented {role} with {years}+ years of experience in {specialty}. Demonstrated expertise in {skill} with proven ability to {achievement}.",
+    "bullet_templates": [
+      "Analyzed {amount} portfolio and identified opportunities that generated {percent}% returns",
+      "Developed financial models for {type} transactions valued at ${amount}M",
+      "Reduced operational costs by ${amount}K through process optimization and automation",
+      "Managed relationships with {number} clients representing ${amount}M in assets",
+      "Prepared comprehensive reports for senior management and regulatory compliance"
+    ],
+    "skills_categories": {
+      "Analysis": ["Financial Modeling", "Valuation", "Risk Assessment", "Forecasting", "Budgeting"],
+      "Tools": ["Excel", "Bloomberg Terminal", "Tableau", "Power BI", "Python", "R"],
+      "Regulations": ["GAAP", "IFRS", "SOX", "Basel III", "Dodd-Frank"],
+      "Software": ["SAP", "Oracle", "QuickBooks", "Salesforce", "Bloomberg"]
+    },
+    "recommended_certs": [
+      "CFA (Chartered Financial Analyst)",
+      "CPA (Certified Public Accountant)",
+      "FRM (Financial Risk Manager)",
+      "Series 7 & 63"
+    ],
+    "color_primary": "#059669",
+    "color_secondary": "#10b981"
+  },
+  "healthcare": {
+    "id": "healthcare",
+    "name": "Healthcare & Medical",
+    "description": "Nursing, Medical, Clinical Research, Health IT",
+    "icon": "🏥",
+    "suggested_sections": ["summary", "licensure", "experience", "education", "certifications", "skills"],
+    "keywords": [
+      "Patient Care", "Clinical", "EHR", "Epic", "Cerner", "HIPAA", "Quality Improvement",
+      "Evidence-Based Practice", "Care Coordination", "Medical Terminology", "ICD-10", "CPT",
+      "Medicare", "Medicaid", "Case Management", "Infection Control", "Patient Safety"
+    ],
+    "summary_template": "Compassionate {role} with {years}+ years of experience in {setting}. Skilled in {skill} with commitment to {value}.",
+    "bullet_templates": [
+      "Provided comprehensive care to {number} patients per shift in {setting}",
+      "Achieved {percent}% patient satisfaction score through quality care delivery",
+      "Reduced {metric} by {percent}% through implementation of {initiative}",
+      "Collaborated with multidisciplinary teams to develop care plans for complex cases",
+      "Mentored {number} junior staff members in clinical procedures and best practices"
+    ],
+    "skills_categories": {
+      "Clinical": ["Patient Assessment", "Medication Administration", "IV Therapy", "Wound Care", "Vital Signs"],
+      "Systems": ["Epic", "Cerner", "Meditech", "Allscripts", "PowerChart"],
+      "Compliance": ["HIPAA", "Joint Commission", "CMS", "OSHA", "Infection Control"],
+      "Soft Skills": ["Patient Communication", "Care Coordination", "Team Collaboration", "Critical Thinking"]
+    },
+    "recommended_certs": [
+      "BLS/CPR",
+      "ACLS",
+      "PALS",
+      "CEN (Certified Emergency Nurse)",
+      "CCRN (Critical Care Registered Nurse)"
+    ],
+    "color_primary": "#dc2626",
+    "color_secondary": "#ef4444"
+  },
+  "marketing": {
+    "id": "marketing",
+    "name": "Marketing & Sales",
+    "description": "Digital Marketing, Sales, Brand Management, Content",
+    "icon": "📈",
+    "suggested_sections": ["summary", "experience", "education", "skills", "certifications"],
+    "keywords": [
+      "Digital Marketing", "SEO", "SEM", "Content Marketing", "Social Media", "Email Marketing",
+      "Google Analytics", "HubSpot", "Salesforce", "CRM", "Lead Generation", "Conversion",
+      "Brand Strategy", "Market Research", "A/B Testing", "ROI", "KPIs", "Campaign Management"
+    ],
+    "summary_template": "Creative {role} with {years}+ years of experience driving {result}. Expert in {skill} with proven ability to {achievement}.",
+    "bullet_templates": [
+      "Increased {metric} by {percent}% through strategic {type} campaigns",
+      "Managed ${amount}K annual marketing budget and achieved {percent}% ROI",
+      "Grew social media following from {start} to {end} in {months} months",
+      "Launched {number} successful campaigns generating ${amount}K in revenue",
+      "Developed and executed {strategy} that resulted in {percent}% increase in conversions"
+    ],
+    "skills_categories": {
+      "Digital": ["SEO", "SEM", "Google Ads", "Facebook Ads", "Email Marketing", "Content Marketing"],
+      "Analytics": ["Google Analytics", "Tableau", "Power BI", "Mixpanel", "Hotjar"],
+      "Tools": ["HubSpot", "Salesforce", "Mailchimp", "Hootsuite", "Canva", "Adobe Creative Suite"],
+      "Strategy": ["Brand Strategy", "Market Research", "Competitive Analysis", "Customer Segmentation"]
+    },
+    "recommended_certs": [
+      "Google Analytics Certified",
+      "HubSpot Inbound Marketing",
+      "Google Ads Certified",
+      "Facebook Blueprint",
+      "Salesforce Administrator"
+    ],
+    "color_primary": "#7c3aed",
+    "color_secondary": "#8b5cf6"
+  },
+  "education": {
+    "id": "education",
+    "name": "Education & Training",
+    "description": "Teaching, Training, Academic, Instructional Design",
+    "icon": "🎓",
+    "suggested_sections": ["summary", "teaching_experience", "education", "certifications", "publications"],
+    "keywords": [
+      "Curriculum Development", "Instructional Design", "Differentiated Instruction",
+      "Assessment", "Classroom Management", "Student Engagement", "LMS", "Blackboard",
+      "Canvas", "Google Classroom", "IEP", "ESL", "Differentiation", "Rubric Design"
+    ],
+    "summary_template": "Dedicated {role} with {years}+ years of experience in {setting}. Passionate about {focus} with proven success in {achievement}.",
+    "bullet_templates": [
+      "Taught {subject} to classes of {number} students, achieving {percent}% pass rate",
+      "Developed curriculum for {number} courses aligned with {standards} standards",
+      "Mentored {number} students, with {percent}% advancing to {outcome}",
+      "Implemented {technology} that improved student engagement by {percent}%",
+      "Created assessment tools that increased learning outcomes by {percent}%"
+    ],
+    "skills_categories": {
+      "Instruction": ["Curriculum Design", "Lesson Planning", "Assessment Design", "Differentiated Instruction"],
+      "Technology": ["Google Classroom", "Canvas", "Blackboard", "Zoom", "Kahoot", "Nearpod"],
+      "Specializations": ["ESL", "Special Education", "Gifted Education", "STEM", "Early Childhood"]
+    },
+    "recommended_certs": [
+      "Teaching Certification",
+      "ESL Certification",
+      "Google Certified Educator",
+      "Microsoft Certified Educator"
+    ],
+    "color_primary": "#d97706",
+    "color_secondary": "#f59e0b"
+  },
+  "consulting": {
+    "id": "consulting",
+    "name": "Consulting & Strategy",
+    "description": "Management Consulting, Strategy, Business Analysis",
+    "icon": "💼",
+    "suggested_sections": ["summary", "experience", "education", "skills", "certifications"],
+    "keywords": [
+      "Strategy", "Business Analysis", "Process Improvement", "Change Management",
+      "Stakeholder Management", "Project Management", "Six Sigma", "Lean", "Agile",
+      "Data Analysis", "Presentation", "Client Management", "Problem Solving", "Leadership"
+    ],
+    "summary_template": "Strategic {role} with {years}+ years of experience delivering {result}. Proven expertise in {skill} across {industries} industries.",
+    "bullet_templates": [
+      "Led {project} initiative resulting in ${amount}M cost savings for Fortune 500 client",
+      "Managed cross-functional team of {number} to deliver {scope} transformation",
+      "Conducted {number} strategic assessments that identified ${amount}M in opportunities",
+      "Developed frameworks adopted by {number} business units across the organization",
+      "Facilitated workshops with {level} executives to drive organizational change"
+    ],
+    "skills_categories": {
+      "Methodologies": ["Six Sigma", "Lean", "Agile", "Design Thinking", "OKR"],
+      "Analysis": ["Business Analysis", "Data Analysis", "Financial Modeling", "Process Mapping"],
+      "Tools": ["Excel", "PowerPoint", "Tableau", "Jira", "Confluence", "Miro"],
+      "Soft Skills": ["Presentation", "Facilitation", "Stakeholder Management", "Executive Communication"]
+    },
+    "recommended_certs": [
+      "PMP (Project Management Professional)",
+      "Six Sigma Black Belt",
+      "Certified Management Consultant",
+      "Agile/Scrum Master"
+    ],
+    "color_primary": "#0891b2",
+    "color_secondary": "#06b6d4"
+  }
+}
