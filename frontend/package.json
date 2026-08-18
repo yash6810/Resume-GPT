@@ -1,0 +1,12 @@
+{
+  "name": "resumegpt-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ResumeGPT frontend automated smoke tests",
+  "scripts": {
+    "test": "node tests/run-tests.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.0"
+  }
+}

@@ -8,15 +8,9 @@ import os
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)) + "/backend")
 
-print("Starting ResumeGPT server...")
-proc = subprocess.Popen(
-    [sys.executable, "-m", "uvicorn", "app.main:app", "--port", "8000"],
-    stdout=subprocess.PIPE,
-    stderr=subprocess.PIPE,
-)
-
-print("Waiting for server to start...")
-time.sleep(10)
-
-print("Server should be running at http://localhost:8000")
-print("To stop: Ctrl+C")
+port = int(os.getenv("PORT", 8000))
+print(f"Starting ResumeGPT server on http://localhost:{port}...")
+try:
+    subprocess.run([sys.executable, "-m", "uvicorn", "app.main:app", "--port", str(port), "--reload"])
+except KeyboardInterrupt:
+    print("\nServer stopped.")

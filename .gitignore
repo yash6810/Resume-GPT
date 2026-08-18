@@ -22,3 +22,13 @@ backend/models/
 
 # OS
 .DS_Store
+
+# Frontend
+frontend/node_modules/
+
+# Local project memory (never committed)
+memory.md
+Yash_Upadhyay_Internship_Resume_Optimized.docx
+Yash_Upadhyay_Internship_Resume_Optimized.pdf
+
+.agents/

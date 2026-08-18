@@ -129,44 +129,30 @@ app.include_router(ab_test.router, prefix="/ab-test", tags=["A/B Testing"])
 app.include_router(email.router, prefix="/email", tags=["Email"])
 
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+# Mount static frontend directory
+frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend"))
+if os.path.exists(frontend_dir):
+    app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
+
+@app.get("/app", response_class=FileResponse)
+@app.get("/index.html", response_class=FileResponse)
+async def serve_frontend():
+    index_path = os.path.join(frontend_dir, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+    return JSONResponse(status_code=404, content={"detail": "Frontend index.html not found"})
+
 @app.get("/")
 async def root():
+    index_path = os.path.join(frontend_dir, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
     return {
         "message": "Welcome to ResumeGPT API",
         "version": "2.0.0",
-        "endpoints": {
-            "parse": "/parse - Upload and parse resume (PDF/DOCX)",
-            "analyze": "/analyze - Analyze resume against job description",
-            "rewrite": "/rewrite - Rewrite bullet points with target keywords",
-            "export": "/export - Export optimized resume as DOCX",
-            "builder_templates": "/builder/templates - List available resume templates",
-            "builder_industry_templates": "/builder/industry-templates - List industry-specific templates",
-            "builder_export": "/builder/export - Build and export resume as DOCX",
-            "builder_text": "/builder/text - Build resume and return as text",
-            "cover_letter_generate": "/cover-letter/generate - Generate cover letter",
-            "cover_letter_export": "/cover-letter/export - Export cover letter as DOCX",
-            "auth_register": "/auth/register - Register new user",
-            "auth_login": "/auth/login - Login user",
-            "auth_me": "/auth/me - Get current user profile",
-            "history_save": "/history/save - Save resume analysis to history",
-            "history_list": "/history/list - List resume history",
-            "history_stats": "/history/stats/summary - Get history statistics",
-            "job_tracker_list": "/job-tracker - List job applications",
-            "job_tracker_create": "/job-tracker - Create job application",
-            "job_tracker_stats": "/job-tracker/stats/summary - Get job tracker statistics",
-            "interview_prep": "/interview-prep - Generate interview questions",
-            "salary_insights": "/salary-insights - Estimate salary range",
-            "linkedin_import": "/linkedin-import - Parse LinkedIn profile",
-            "ats_simulator_platforms": "/ats-simulator/platforms - List supported ATS platforms",
-            "ats_simulator_analyze": "/ats-simulator/analyze - Multi-platform analysis",
-            "ats_simulator_linkedin": "/ats-simulator/linkedin - LinkedIn ATS simulation",
-            "ats_simulator_indeed": "/ats-simulator/indeed - Indeed ATS simulation",
-            "ats_simulator_greenhouse": "/ats-simulator/greenhouse - Greenhouse ATS simulation",
-            "ab_test_create": "/ab-test/create - Create A/B test",
-            "ab_test_list": "/ab-test/list - List A/B tests",
-            "ab_test_outcome": "/ab-test/{id}/outcome - Record outcome",
-            "ab_test_stats": "/ab-test/stats/overview - Get A/B test statistics",
-        },
     }
 
 

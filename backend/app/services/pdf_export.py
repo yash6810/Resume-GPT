@@ -79,7 +79,7 @@ def create_resume_pdf(
 
         pdf.set_font("Helvetica", "", 10)
         pdf.set_text_color(51, 51, 51)
-        pdf.multi_cell(0, 5, " • ".join(skills))
+        pdf.multi_cell(0, 5, " | ".join(skills))
         pdf.ln(5)
 
     # Experience
@@ -112,7 +112,7 @@ def create_resume_pdf(
                 pdf.set_text_color(51, 51, 51)
                 for bullet in exp["bullets"]:
                     pdf.cell(5)
-                    pdf.cell(5, 5, chr(8226))  # Bullet character
+                    pdf.cell(5, 5, "-")
                     pdf.multi_cell(0, 5, bullet)
 
             pdf.ln(3)
@@ -152,7 +152,7 @@ def create_resume_pdf(
         pdf.set_text_color(51, 51, 51)
         for cert in certifications:
             pdf.cell(5)
-            pdf.cell(5, 5, chr(8226))
+            pdf.cell(5, 5, "-")
             pdf.cell(0, 5, cert, ln=True)
 
     # Return PDF as bytes
