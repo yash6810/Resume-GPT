@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: resumegpt
+    env: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: DEBUG
+        value: "False"
