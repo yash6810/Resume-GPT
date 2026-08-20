@@ -1,34 +1,71 @@
 # Python
 __pycache__/
 *.py[cod]
+*$py.class
 *.so
 .venv/
 venv/
+env/
+ENV/
+build/
+dist/
+*.egg-info/
 
-# IDE
-.vscode/
-.idea/
+# Testing & Coverage
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
 
-# Environment
+# Environment & Secrets
 .env
+.env.local
+.env.*.local
 
-# Database
+# Databases & Local State
 *.db
+*.sqlite
+*.sqlite3
 
-# Models & Data
+# ML Models & Heavy Dataset Caches
 model_*/
 backend/data/ner_datasets/
 backend/models/
+*.bin
+*.tar.gz
+*.zip
 
-# OS
-.DS_Store
-
-# Frontend
+# Frontend & Dependencies
 frontend/node_modules/
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Local project memory (never committed)
-memory.md
+# Scratch & Temporary Logs
+scratch/
+*.log
+
+# Operating System & IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Personal / Local Test Resumes
 Yash_Upadhyay_Internship_Resume_Optimized.docx
 Yash_Upadhyay_Internship_Resume_Optimized.pdf
 
-.agents/
+# Internal Notes, Transcripts & Non-Essential Markdown
+memory.md
+docs/full_conversation_transcript.md
+extension/STITCH_DESIGN_BRIEF.md
+*transcript*.md
+*notes*.md
+*draft*.md
+
+# Local PowerShell Scripts
+*.ps1
