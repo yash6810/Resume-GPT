@@ -1,201 +1,236 @@
-// ResumeGPT Scanner - Content Script
-// Injected into job sites to detect and extract job descriptions
+// ResumeGPT Scanner - High-Precision Content Script
+// Detects and cleanly extracts job postings from LinkedIn, Indeed, Glassdoor, and career portals
 
 (function () {
   "use strict";
 
-  // Job site selectors
-  const SITE_SELECTORS = {
+  const SITE_CONFIGS = {
     "linkedin.com": {
+      source: "LinkedIn",
       title: [
+        "h1.t-24",
         ".job-details-jobs-unified-top-card__job-title",
         ".jobs-unified-top-card__job-title",
-        "h1",
+        ".jobs-details__main-content h1",
+        "h1.top-card-layout__title",
+        "h1"
+      ],
+      company: [
+        ".job-details-jobs-unified-top-card__company-name",
+        ".jobs-unified-top-card__company-name",
+        "a.topcard__org-name-link",
+        ".job-details-jobs-unified-top-card__primary-description-container a",
+        "[data-company-name]"
+      ],
+      location: [
+        ".job-details-jobs-unified-top-card__bullet",
+        ".jobs-unified-top-card__bullet",
+        ".topcard__flavor--bullet"
       ],
       description: [
+        "#job-details",
         ".jobs-description__content",
         ".jobs-box__html-content",
-        ".job-details-jobs-unified-top-card__job-description",
-        "#job-details",
-      ],
-      source: "LinkedIn",
+        ".jobs-description-content__text",
+        ".show-more-less-html__markup",
+        "article.jobs-description__container"
+      ]
     },
     "indeed.com": {
-      title: [".jobsearch-JobInfoHeader-title", "h1"],
-      description: ["#jobDescriptionText", ".jobsearch-jobDescriptionText"],
       source: "Indeed",
+      title: [
+        "[data-testid='jobsearch-JobInfoHeader-title']",
+        ".jobsearch-JobInfoHeader-title",
+        "h1.jobsearch-JobInfoHeader-title",
+        "h2.jobsearch-JobInfoHeader-title",
+        "h1"
+      ],
+      company: [
+        "[data-testid='inlineHeader-companyName']",
+        ".jobsearch-InlineCompanyRating-companyHeader",
+        "[data-company-name='true']",
+        ".jobsearch-CompanyInfoContainer a"
+      ],
+      location: [
+        "[data-testid='inlineHeader-companyLocation']",
+        ".jobsearch-JobInfoHeader-companyLocation"
+      ],
+      description: [
+        "#jobDescriptionText",
+        ".jobsearch-jobDescriptionText",
+        "div#jobDescriptionText",
+        ".jobsearch-JobComponent-description"
+      ]
     },
     "glassdoor.com": {
-      title: [".job-title", "h1"],
-      description: [".jobDescriptionContent", ".desc"],
       source: "Glassdoor",
+      title: [
+        "[data-test='job-title']",
+        ".job-title",
+        "h1.headingSubheading",
+        "h1"
+      ],
+      company: [
+        "[data-test='employer-name']",
+        ".employer-name",
+        ".job-search-key-16z3fd0"
+      ],
+      location: [
+        "[data-test='location']",
+        ".job-location"
+      ],
+      description: [
+        "[data-test='jobDescriptionContent']",
+        ".jobDescriptionContent",
+        ".desc",
+        "#JobDescriptionContainer"
+      ]
     },
     "ziprecruiter.com": {
-      title: [".job_title", "h1"],
-      description: [".job_description", "#job-description"],
       source: "ZipRecruiter",
+      title: [".job_title", "h1.job_title", "h1"],
+      company: [".hiring_company_text", ".hiring_company"],
+      location: [".location_text", ".location"],
+      description: [".job_description", "#job-description", ".jobDescriptionSection"]
     },
-    "monster.com": {
-      title: [".job_title", "h1"],
-      description: [".job_description", "#JobDescription"],
-      source: "Monster",
+    "wellfound.com": {
+      source: "Wellfound (AngelList)",
+      title: ["h1.styles_title__", "h1"],
+      company: [".styles_startupName__", "h2"],
+      location: [".styles_location__"],
+      description: [".styles_description__", "[class*='jobDescription']"]
     },
+    "greenhouse.io": {
+      source: "Greenhouse",
+      title: [".app-title", "h1.app-title", "h1"],
+      company: [".company-name", "h2"],
+      location: [".location"],
+      description: ["#content", ".content", "#app_body"]
+    },
+    "lever.co": {
+      source: "Lever",
+      title: [".posting-headline h2", "h2"],
+      company: [".main-header-logo", ".posting-headline"],
+      location: [".posting-categories .location"],
+      description: [".posting-description", ".section-wrapper", ".content"]
+    }
   };
 
-  // Get current site
   function getCurrentSite() {
     const hostname = window.location.hostname;
-    for (const site of Object.keys(SITE_SELECTORS)) {
-      if (hostname.includes(site)) {
-        return site;
-      }
+    for (const site of Object.keys(SITE_CONFIGS)) {
+      if (hostname.includes(site)) return site;
     }
     return null;
   }
 
-  // Extract text from selectors
+  function cleanText(raw) {
+    if (!raw) return "";
+    return raw
+      .replace(/[\r\t]+/g, " ")
+      .replace(/\n\s*\n+/g, "\n\n")
+      .replace(/\b(Show more|Show less|Apply now|Easy Apply|Save job|Report this job|Report job|Posted on|About the company)\b/gi, "")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+  }
+
   function extractFromSelectors(selectors) {
+    if (!selectors) return "";
     for (const selector of selectors) {
-      const element = document.querySelector(selector);
-      if (element && element.textContent.trim()) {
-        return element.textContent.trim();
+      const el = document.querySelector(selector);
+      if (el) {
+        // Prefer innerText as it respects line breaks and ignores hidden elements
+        const txt = el.innerText || el.textContent;
+        if (txt && txt.trim().length > 3) {
+          return cleanText(txt);
+        }
       }
     }
-    return null;
+    return "";
   }
 
-  // Detect job information
   function detectJob() {
-    const site = getCurrentSite();
+    const siteKey = getCurrentSite();
 
-    if (site && SITE_SELECTORS[site]) {
-      const config = SITE_SELECTORS[site];
-      const title = extractFromSelectors(config.title);
-      const description = extractFromSelectors(config.description);
+    if (siteKey && SITE_CONFIGS[siteKey]) {
+      const cfg = SITE_CONFIGS[siteKey];
+      const title = extractFromSelectors(cfg.title);
+      const company = extractFromSelectors(cfg.company);
+      const location = extractFromSelectors(cfg.location);
+      const description = extractFromSelectors(cfg.description);
 
-      if (title || description) {
+      if (description || title) {
         return {
           title: title || "Job Detected",
+          company: company || "",
+          location: location || "",
           jobText: description || title,
-          source: config.source,
-          success: true,
+          source: cfg.source,
+          success: true
         };
       }
     }
 
-    // Generic detection for other sites
-    return genericDetection();
+    // Generic heuristic fallback for career portals
+    return genericFallbackDetection();
   }
 
-  // Generic job detection
-  function genericDetection() {
-    // Look for common job description patterns
-    const bodyText = document.body.innerText.toLowerCase();
-
-    // Check if this looks like a job posting
-    const jobKeywords = [
-      "responsibilities",
-      "requirements",
-      "qualifications",
-      "experience",
-      "skills",
-      "job description",
-      "about the role",
-      "what you'll do",
+  function genericFallbackDetection() {
+    const candidateContainers = [
+      "main",
+      "article",
+      "[role='main']",
+      "#job-description",
+      ".job-description",
+      ".job-details",
+      "[class*='description']"
     ];
 
-    const hasJobKeywords = jobKeywords.some((keyword) =>
-      bodyText.includes(keyword)
-    );
+    let bestContainer = null;
+    let maxLen = 0;
 
-    if (hasJobKeywords) {
-      // Try to find the main content
-      const mainContent =
-        document.querySelector("main") ||
-        document.querySelector("article") ||
-        document.querySelector(".job-description") ||
-        document.querySelector('[class*="description"]');
-
-      if (mainContent) {
-        return {
-          title: document.title || "Job Detected",
-          jobText: mainContent.textContent.trim().substring(0, 2000),
-          source: new URL(window.location.href).hostname,
-          success: true,
-        };
+    for (const sel of candidateContainers) {
+      const el = document.querySelector(sel);
+      if (el) {
+        const len = (el.innerText || el.textContent || "").length;
+        if (len > maxLen && len > 150) {
+          maxLen = len;
+          bestContainer = el;
+        }
       }
+    }
+
+    if (bestContainer) {
+      const titleEl = document.querySelector("h1") || document.querySelector("h2");
+      const title = titleEl ? titleEl.innerText.trim() : document.title;
+      const desc = cleanText(bestContainer.innerText || bestContainer.textContent || "");
+
+      return {
+        title: title || "Job Posting",
+        company: "",
+        location: "",
+        jobText: desc.substring(0, 4000),
+        source: new URL(window.location.href).hostname.replace("www.", ""),
+        success: true
+      };
     }
 
     return {
-      title: null,
-      jobText: null,
-      source: null,
-      success: false,
+      title: "",
+      company: "",
+      location: "",
+      jobText: "",
+      source: "",
+      success: false
     };
   }
 
-  // Listen for messages from popup
+  // Handle messages from popup
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "detectJob") {
       const result = detectJob();
       sendResponse(result);
     }
     return true;
-  });
-
-  // Add floating badge (optional)
-  function addFloatingBadge(score) {
-    // Remove existing badge
-    const existing = document.getElementById("resumegpt-badge");
-    if (existing) existing.remove();
-
-    // Create badge
-    const badge = document.createElement("div");
-    badge.id = "resumegpt-badge";
-    badge.innerHTML = `
-      <div class="resumegpt-badge-content">
-        <span class="resumegpt-icon">🎯</span>
-        <span class="resumegpt-score">ATS: ${score}/100</span>
-      </div>
-    `;
-
-    // Add styles
-    badge.style.cssText = `
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: linear-gradient(135deg, #e94560, #f39c12);
-      color: white;
-      padding: 10px 16px;
-      border-radius: 12px;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 14px;
-      font-weight: bold;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      z-index: 10000;
-      cursor: pointer;
-      transition: transform 0.2s;
-    `;
-
-    badge.addEventListener("mouseenter", () => {
-      badge.style.transform = "scale(1.05)";
-    });
-
-    badge.addEventListener("mouseleave", () => {
-      badge.style.transform = "scale(1)";
-    });
-
-    badge.addEventListener("click", () => {
-      chrome.runtime.sendMessage({ action: "openPopup" });
-    });
-
-    document.body.appendChild(badge);
-  }
-
-  // Listen for score updates
-  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === "showScore") {
-      addFloatingBadge(request.score);
-    }
   });
 })();

@@ -21,6 +21,7 @@ from app.api import (
     job_tracker,
     parse,
     rewrite,
+    cover_letter,
 )
 from app.core.database import init_db
 from app.models.schemas import AnalyzeRequest, AnalyzeResponse
@@ -35,6 +36,7 @@ app.include_router(salary_insights.router)
 app.include_router(job_tracker.router)
 app.include_router(parse.router)
 app.include_router(rewrite.router)
+app.include_router(cover_letter.router)
 
 init_db()
 client = TestClient(app)
@@ -339,3 +341,39 @@ def test_job_tracker_create_list_delete_contract():
 
     deleted = client.delete(f"/job-tracker/{created['id']}", headers=headers)
     assert deleted.status_code == 200
+
+
+def test_cover_letter_generate_contract():
+    r = client.post(
+        "/cover-letter/generate",
+        json={
+            "resume_text": SAMPLE_RESUME,
+            "job_description": SAMPLE_JD,
+            "company_name": "Acme Corp",
+            "position": "Software Engineer",
+        },
+    )
+    assert r.status_code == 200, r.text
+    data = r.json()
+    assert "cover_letter" in data
+    assert len(data["cover_letter"]) > 50
+    assert "Acme Corp" in data["cover_letter"]
+
+
+def test_cover_letter_export_contract():
+    r = client.post(
+        "/cover-letter/export",
+        json={
+            "resume_text": SAMPLE_RESUME,
+            "job_description": SAMPLE_JD,
+            "company_name": "Acme Corp",
+            "position": "Software Engineer",
+        },
+    )
+    assert r.status_code == 200, r.text
+    assert (
+        r.headers["content-type"]
+        == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
+    doc = Document(io.BytesIO(r.content))
+    assert len(doc.paragraphs) > 0

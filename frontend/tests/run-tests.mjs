@@ -304,6 +304,83 @@ async function runJsdomTests() {
     window.moveJob(id);
     assert(document.getElementById('col-screening').textContent.includes('MoveCo'), 'moved to screening');
   });
+
+  await test('cover letter studio generates customized draft', async () => {
+    const fakeCL = { cover_letter: 'Dear Hiring Team at Crossing Infotech,\n\nI am thrilled to apply for Data Analyst Intern...' };
+    const { document, window } = await loadApp(makeFetch({
+      '/health': { status: 'healthy' },
+      '/cover-letter/generate': fakeCL
+    }));
+    window.openCoverLetterStudio();
+    assert(document.getElementById('modal-cover-letter').classList.contains('active'), 'cover letter modal open');
+    document.getElementById('cl-company').value = 'Crossing Infotech';
+    document.getElementById('cl-position').value = 'Data Analyst Intern';
+    document.getElementById('cl-job-desc').value = 'Looking for an intern skilled in Python, SQL, Excel, and Power BI';
+    await window.generateCoverLetter();
+    assert(!document.getElementById('cl-result-container').classList.contains('hidden'), 'result shown');
+    assert(document.getElementById('cl-result-text').value.includes('Crossing Infotech'), 'contains company');
+  });
+
+  await test('auto-tailor updates builder summary and skills for target role', async () => {
+    const { document, window } = await loadApp(makeFetch({ '/health': { status: 'healthy' } }));
+    window.showPage('builder');
+    document.getElementById('tailor-role').value = 'Data Analyst Intern';
+    document.getElementById('tailor-jd').value = 'Requirements: Python, SQL, Excel, Power BI, Reporting, Data Analysis';
+    window.executeAutoTailor();
+    await new Promise(r => setTimeout(r, 450));
+    const summary = document.getElementById('builder-summary').value;
+    const skills = document.getElementById('builder-skills').value;
+    assert(summary.includes('Data Analyst Intern'), 'summary tailored to role');
+    assert(skills.includes('Python') || skills.includes('Sql') || skills.includes('Excel'), 'skills injected');
+  });
+
+  await test('ats diff card displays score delta and progress on consecutive analyses', async () => {
+    let callCount = 0;
+    const fetchStub = makeFetch({
+      '/health': { status: 'healthy' },
+      '/analyze': () => {
+        callCount++;
+        if (callCount === 1) {
+          return new Response(JSON.stringify({
+            ats_score: 60,
+            subscores: { keywords: 20, role_match: 15, experience_relevance: 15, quality: 10 },
+            skill_matches: [{ skill: 'python', type: 'exact' }],
+            missing_skills: ['docker', 'kubernetes'],
+            recommendations: ['Add docker']
+          }), { status: 200, headers: { 'content-type': 'application/json' } });
+        } else {
+          return new Response(JSON.stringify({
+            ats_score: 85,
+            subscores: { keywords: 35, role_match: 25, experience_relevance: 15, quality: 10 },
+            skill_matches: [{ skill: 'python', type: 'exact' }, { skill: 'docker', type: 'exact' }],
+            missing_skills: ['kubernetes'],
+            recommendations: ['Add kubernetes']
+          }), { status: 200, headers: { 'content-type': 'application/json' } });
+        }
+      }
+    });
+    const { document, window } = await loadApp(fetchStub);
+    window.loadSampleResume();
+    await window.runAnalysis();
+    assert(document.getElementById('ats-diff-card').classList.contains('hidden'), 'diff card hidden on first run');
+
+    // Second run
+    window.injectSkill('docker');
+    await window.runAnalysis();
+    assert(!document.getElementById('ats-diff-card').classList.contains('hidden'), 'diff card visible on second run');
+    assert(document.getElementById('diff-delta-badge').textContent.includes('+25%'), 'diff delta shows lift');
+    assert(document.getElementById('diff-prev-score').textContent === '60%', 'previous score is 60%');
+    assert(document.getElementById('diff-curr-score').textContent === '85%', 'current score is 85%');
+  });
+
+  await test('checkUrlParams extracts role and description from URL query parameters', async () => {
+    const { document, window } = await loadApp(makeFetch({ '/health': { status: 'healthy' } }));
+    // Simulate query param values
+    window.history.pushState({}, '', '?role=Staff+Frontend+Engineer&desc=Expertise+in+Vue+and+TypeScript');
+    window.checkUrlParams();
+    assert(document.getElementById('target-role').value === 'Staff Frontend Engineer', 'role extracted');
+    assert(document.getElementById('job-desc-input').value.includes('Vue'), 'job desc extracted');
+  });
 }
 
 // ---------------------------------------------------------------

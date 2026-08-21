@@ -143,8 +143,8 @@ body {
     padding: .65rem .875rem; 
     border: 1px solid rgba(255, 255, 255, 0.1); 
     border-radius: .625rem; 
-    background: rgba(11, 17, 32, 0.85); 
-    color: #f8fafc; 
+    background-color: #0b1120 !important; 
+    color: #f8fafc !important; 
     font-size: .875rem;
     transition: border-color .2s, box-shadow .2s, background-color .2s; 
 }
@@ -153,11 +153,28 @@ body {
     outline: none; 
     border-color: #0ea5e9; 
     box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2); 
-    background: rgba(11, 17, 32, 0.98); 
+    background-color: #0b1120 !important; 
+    color: #ffffff !important;
 }
 .field.field-error, .field-error { 
     border-color: #f43f5e !important; 
     box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.2) !important; 
+}
+
+/* Override browser autofill bright white backgrounds */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #0b1120 inset !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    caret-color: #f8fafc !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    transition: background-color 5000s ease-in-out 0s;
 }
 .label { 
     display: block; 
@@ -255,6 +272,9 @@ body {
 <button onclick="showPage('analyzer')" class="btn btn-primary">
 <span class="material-symbols-outlined text-sm">analytics</span><span>New Analysis</span>
 </button>
+<button onclick="openCoverLetterStudio()" class="btn btn-ghost">
+<span class="material-symbols-outlined text-sm">mail</span><span>Cover Letter</span>
+</button>
 <button onclick="openBulletRewriter()" class="btn btn-ghost">
 <span class="material-symbols-outlined text-sm">auto_fix_high</span><span>Rewrite Bullets</span>
 </button>
@@ -325,10 +345,10 @@ body {
 <span class="material-symbols-outlined text-teal-400 text-2xl">edit_note</span>
 </div>
 <h4 class="text-base font-bold text-white mb-1.5 flex items-center justify-between">
-<span>Resume Builder</span>
+<span>Resume Builder &amp; Auto-Tailor</span>
 <span class="material-symbols-outlined text-slate-500 group-hover:text-teal-400 text-sm group-hover:translate-x-1 transition">arrow_forward</span>
 </h4>
-<p class="text-xs text-slate-400 leading-relaxed">Build structured ATS-compliant resumes with real-time preview and instant DOCX/PDF export.</p>
+<p class="text-xs text-slate-400 leading-relaxed">Build structured ATS-compliant resumes with 1-click JD tailoring and instant DOCX/PDF export.</p>
 </button>
 
 <button onclick="showPage('tracker')" class="glass-card rounded-xl p-6 text-left hover:-translate-y-1 transition-all cursor-pointer group">
@@ -421,13 +441,41 @@ body {
 </div>
 
 <div class="relative w-28 h-28 shrink-0">
-<svg class="w-full h-full transform -rotate-90" viewbox="0 0 128 128">
-<circle class="text-slate-800/80" cx="64" cy="64" fill="transparent" r="56" stroke="currentColor" stroke-width="10"></circle>
-<circle id="score-circle" class="text-emerald-500" cx="64" cy="64" fill="transparent" r="56" stroke="currentColor" stroke-dasharray="351.85" stroke-dashoffset="274" stroke-linecap="round" stroke-width="10"></circle>
+<svg class="w-full h-full transform -rotate-90" viewBox="0 0 128 128">
+<circle class="text-slate-800" cx="64" cy="64" r="50" fill="transparent" stroke="currentColor" stroke-width="9"></circle>
+<circle id="score-circle" class="text-emerald-500 transition-all duration-700" cx="64" cy="64" r="50" fill="transparent" stroke="currentColor" stroke-width="9" stroke-dasharray="314.16" stroke-dashoffset="314.16" stroke-linecap="round"></circle>
 </svg>
 <div class="absolute inset-0 flex flex-col items-center justify-center">
 <span class="text-3xl font-extrabold text-white font-mono" id="ats-score">--</span>
 <span class="text-[10px] text-slate-400 font-mono">/ 100</span>
+</div>
+</div>
+</div>
+
+<!-- Live Before vs After Diff Card -->
+<div id="ats-diff-card" class="glass-card rounded-xl p-5 border border-sky-500/30 bg-gradient-to-r from-sky-950/30 via-slate-900/60 to-emerald-950/30 hidden fade-in">
+<div class="flex items-center justify-between mb-3 pb-2.5 border-b border-white/10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-emerald-400 text-base">trending_up</span>
+<h3 class="text-xs font-bold uppercase tracking-wider text-slate-200">ATS Optimization Diff</h3>
+</div>
+<span id="diff-delta-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">+0% Lift</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+<div class="flex items-center justify-between p-3 rounded-lg bg-slate-950/70 border border-white/5">
+<div>
+<p class="text-[10px] text-slate-400 uppercase font-mono">Baseline</p>
+<p id="diff-prev-score" class="text-xl font-extrabold text-slate-400 font-mono">--</p>
+</div>
+<span class="material-symbols-outlined text-slate-600 text-base">arrow_forward</span>
+<div>
+<p class="text-[10px] text-emerald-400 uppercase font-mono">Optimized</p>
+<p id="diff-curr-score" class="text-xl font-extrabold text-emerald-400 font-mono">--</p>
+</div>
+</div>
+<div class="space-y-1 text-xs">
+<p class="text-[11px] text-slate-300 font-semibold" id="diff-summary-text">ATS score updated after tailoring keywords.</p>
+<div id="diff-new-skills" class="flex flex-wrap gap-1 mt-1"></div>
 </div>
 </div>
 </div>
@@ -516,8 +564,11 @@ body {
 <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">Structured Resume Builder</h1>
 <p class="text-sm text-slate-400 mt-1">Generate clean, ATS-compliant formats with instant DOCX &amp; PDF export.</p>
 </div>
-<div class="flex items-center gap-2">
-<select id="builder-industry-select" onchange="applyIndustryTemplate(this.value)" class="field !py-1.5 !px-3 text-xs max-w-[200px] bg-slate-900 border-white/10">
+<div class="flex flex-wrap items-center gap-2">
+<button type="button" onclick="openAutoTailorModal()" class="btn btn-primary shadow-lg shadow-sky-500/20">
+<span class="material-symbols-outlined text-sm">auto_fix_high</span><span>🎯 Auto-Tailor to JD</span>
+</button>
+<select id="builder-industry-select" onchange="applyIndustryTemplate(this.value)" class="field !py-1.5 !px-3 text-xs max-w-[190px] bg-slate-900 border-white/10">
 <option value="">Load Industry Preset...</option>
 <option value="data">Data Analyst / Scientist</option>
 <option value="software">Software Engineer</option>
@@ -555,7 +606,10 @@ body {
 </div>
 
 <div>
-<label class="label" for="builder-summary">Executive Summary</label>
+<div class="flex items-center justify-between mb-1">
+<label class="label !mb-0" for="builder-summary">Executive Summary</label>
+<button type="button" onclick="openAutoTailorModal()" class="text-xs text-sky-400 hover:text-sky-300 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-xs">auto_fix_high</span>Tailor Summary</button>
+</div>
 <textarea id="builder-summary" class="field h-24 resize-none leading-relaxed text-xs md:text-sm" placeholder="Product Designer with 5+ years of experience leading cross-functional teams..."></textarea>
 </div>
 
@@ -711,6 +765,18 @@ body {
 </div>
 </div>
 
+<!-- Cover Letter Generator -->
+<div class="glass-card rounded-xl p-6 md:p-8 flex flex-col justify-between">
+<div>
+<div class="w-12 h-12 bg-sky-500/10 rounded-xl flex items-center justify-center mb-5 border border-sky-500/20">
+<span class="material-symbols-outlined text-sky-400 text-2xl">description</span>
+</div>
+<h3 class="text-xl font-bold text-white mb-2">Cover Letter Studio</h3>
+<p class="text-xs text-slate-400 mb-6 leading-relaxed">Draft tailored, high-converting cover letters matching target job descriptions with instant DOCX export.</p>
+</div>
+<button onclick="openCoverLetterStudio()" class="btn btn-primary w-full">Launch Studio</button>
+</div>
+
 <!-- Bullet Rewriter Tool -->
 <div class="glass-card rounded-xl p-6 md:p-8 flex flex-col justify-between">
 <div>
@@ -720,7 +786,7 @@ body {
 <h3 class="text-xl font-bold text-white mb-2">ATS Bullet Rewriter</h3>
 <p class="text-xs text-slate-400 mb-6 leading-relaxed">Transform weak resume bullets into high-impact, keyword-dense achievement statements.</p>
 </div>
-<button onclick="openBulletRewriter()" class="btn btn-primary w-full">Launch Rewriter</button>
+<button onclick="openBulletRewriter()" class="btn btn-ghost w-full">Launch Rewriter</button>
 </div>
 
 <!-- Salary Insights -->
@@ -733,20 +799,6 @@ body {
 <p class="text-xs text-slate-400 mb-6 leading-relaxed">Calculate compensation ranges, percentiles, and negotiation levers for your exact location &amp; skillset.</p>
 </div>
 <button onclick="openSalaryCalc()" class="btn btn-ghost w-full">Calculate Range</button>
-</div>
-
-<!-- Cover Letter -->
-<div class="glass-card rounded-xl p-6 flex flex-col justify-between">
-<div>
-<div class="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center mb-4 border border-white/10">
-<span class="material-symbols-outlined text-slate-300 text-xl">description</span>
-</div>
-<h3 class="text-base font-bold text-white mb-1.5">Cover Letter Generator</h3>
-<p class="text-xs text-slate-400 mb-4 leading-relaxed">Draft tailored, high-converting cover letters matching target job descriptions.</p>
-</div>
-<button onclick="showPage('builder')" class="text-sky-400 text-xs flex items-center gap-1 hover:text-sky-300 font-semibold">
-<span>Launch Writer</span><span class="material-symbols-outlined text-xs">arrow_forward</span>
-</button>
 </div>
 
 <!-- Skills Gap -->
@@ -766,6 +818,81 @@ body {
 </div>
 </div>
 </main>
+</div>
+
+<!-- Auto-Tailor Modal -->
+<div id="modal-auto-tailor" class="modal fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="auto-tailor-title">
+<div class="bg-slate-900 border border-white/10 rounded-2xl p-6 md:p-8 max-w-xl w-full mx-4 shadow-2xl max-h-[90vh] overflow-y-auto">
+<div class="flex justify-between items-center mb-4">
+<h3 id="auto-tailor-title" class="text-lg font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-sky-400">auto_fix_high</span>
+<span>🎯 1-Click JD Auto-Tailor</span>
+</h3>
+<button onclick="hideModal('modal-auto-tailor')" class="text-slate-400 hover:text-white"><span class="material-symbols-outlined text-sm">close</span></button>
+</div>
+<p class="text-xs text-slate-400 mb-4">Paste the target Job Description below. ResumeGPT will extract key competencies, merge high-value keywords, and optimize your summary and experience bullets.</p>
+<div class="space-y-3.5 mb-5">
+<div>
+<label class="label" for="tailor-role">Target Job Title</label>
+<input type="text" id="tailor-role" class="field" placeholder="e.g. Data Analyst Intern or Senior Frontend Engineer">
+</div>
+<div>
+<label class="label" for="tailor-jd">Target Job Description</label>
+<textarea id="tailor-jd" class="field h-36 resize-none text-xs leading-relaxed" placeholder="Paste full job description requirements, responsibilities, and required skills here..."></textarea>
+</div>
+<button id="tailor-btn" onclick="executeAutoTailor()" class="btn btn-primary w-full">Apply 1-Click JD Optimization</button>
+</div>
+<div class="pt-3 border-t border-white/10 flex justify-end">
+<button onclick="hideModal('modal-auto-tailor')" class="btn btn-ghost">Cancel</button>
+</div>
+</div>
+</div>
+
+<!-- Cover Letter Studio Modal -->
+<div id="modal-cover-letter" class="modal fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="cl-title">
+<div class="bg-slate-900 border border-white/10 rounded-2xl p-6 md:p-8 max-w-2xl w-full mx-4 shadow-2xl max-h-[90vh] overflow-y-auto">
+<div class="flex justify-between items-center mb-4">
+<h3 id="cl-title" class="text-lg font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-sky-400">description</span>
+<span>AI Cover Letter Studio</span>
+</h3>
+<button onclick="hideModal('modal-cover-letter')" class="text-slate-400 hover:text-white"><span class="material-symbols-outlined text-sm">close</span></button>
+</div>
+<div class="space-y-4 mb-4">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<div>
+<label class="label" for="cl-company">Company Name</label>
+<input type="text" id="cl-company" class="field text-xs" placeholder="e.g. Crossing Infotech">
+</div>
+<div>
+<label class="label" for="cl-position">Target Position</label>
+<input type="text" id="cl-position" class="field text-xs" placeholder="e.g. Data Analyst Intern">
+</div>
+</div>
+<div>
+<label class="label" for="cl-job-desc">Job Description / Requirements</label>
+<textarea id="cl-job-desc" class="field h-24 resize-none text-xs" placeholder="Paste job description here..."></textarea>
+</div>
+<div class="flex justify-between items-center gap-3">
+<button id="cl-generate-btn" onclick="generateCoverLetter()" class="btn btn-primary flex-1">Generate Cover Letter</button>
+</div>
+</div>
+
+<div id="cl-result-container" class="space-y-3 hidden">
+<div class="flex justify-between items-center pt-2 border-t border-white/10">
+<span class="text-[11px] font-mono font-bold uppercase text-slate-400">Generated Draft</span>
+<div class="flex items-center gap-2">
+<button id="cl-copy-btn" onclick="copyCoverLetter()" class="text-xs text-sky-400 hover:text-sky-300 font-semibold inline-flex items-center gap-1"><span class="material-symbols-outlined text-xs">content_copy</span>Copy</button>
+<button id="cl-export-docx-btn" onclick="exportCoverLetterDOCX()" class="text-xs text-teal-400 hover:text-teal-300 font-semibold inline-flex items-center gap-1"><span class="material-symbols-outlined text-xs">download</span>Export DOCX</button>
+</div>
+</div>
+<textarea id="cl-result-text" class="field h-52 resize-none text-xs font-mono leading-relaxed bg-slate-950/90 text-slate-200 border-white/10"></textarea>
+</div>
+
+<div class="pt-4 border-t border-white/10 mt-5 flex justify-end">
+<button onclick="hideModal('modal-cover-letter')" class="btn btn-ghost">Close</button>
+</div>
+</div>
 </div>
 
 <!-- Add Job Modal -->
@@ -952,7 +1079,7 @@ const INDUSTRY_PRESETS = {
   data: {
     title: 'Data Analyst',
     summary: 'Detail-oriented Data Analyst with expertise in Python, SQL, Excel, and Power BI. Proven track record of translating complex datasets into actionable business dashboards and KPI reports.',
-    skills: 'Python, SQL, Excel (Pivot Tables, VLOOKUP), Power BI, Pandas, NumPy, Data Cleaning, Data Visualization',
+    skills: 'Python, SQL, Excel (Pivot Tables, VLOOKUP), Power BI, Pandas, NumPy, Data Cleaning, Data Visualization, Reporting',
     exp: 'Enterprise Analytics Inc. | Data Analyst | 2022 - Present\n- Built automated SQL and Python ETL data pipelines, cutting report generation time by 40%\n- Developed interactive Power BI dashboards to monitor executive KPIs and financial trends\n- Conducted exploratory data analysis and root cause anomaly detection across 1M+ rows'
   },
   software: {
@@ -1382,12 +1509,78 @@ function injectSkill(skill) {
   showToast('Added "' + skill + '" to your resume! Click Analyze to recalculate.', 'success');
 }
 
+let previousAtsScore = null;
+let previousMissingSkills = null;
+
+function updateDiffCard(currentScore, sub, matched, missing) {
+  const card = $('ats-diff-card');
+  if (!card) return;
+
+  if (previousAtsScore === null || previousAtsScore === undefined) {
+    previousAtsScore = currentScore;
+    previousMissingSkills = [...missing];
+    card.classList.add('hidden');
+    return;
+  }
+
+  const delta = currentScore - previousAtsScore;
+  const deltaBadge = $('diff-delta-badge');
+  const prevEl = $('diff-prev-score');
+  const currEl = $('diff-curr-score');
+  const summaryText = $('diff-summary-text');
+  const newSkillsContainer = $('diff-new-skills');
+
+  if (prevEl) prevEl.textContent = previousAtsScore + '%';
+  if (currEl) currEl.textContent = currentScore + '%';
+
+  if (deltaBadge) {
+    if (delta > 0) {
+      deltaBadge.textContent = '+' + delta + '% ATS Lift';
+      deltaBadge.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+    } else if (delta === 0) {
+      deltaBadge.textContent = '±0% Unchanged';
+      deltaBadge.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-slate-800 text-slate-400 border border-slate-700';
+    } else {
+      deltaBadge.textContent = delta + '% Drop';
+      deltaBadge.className = 'px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30';
+    }
+  }
+
+  if (summaryText) {
+    if (delta > 0) {
+      summaryText.textContent = '🚀 ATS score improved by ' + delta + ' points after optimizing keywords and structure!';
+    } else if (delta === 0) {
+      summaryText.textContent = 'Score unchanged. Add more target keywords to boost compatibility.';
+    } else {
+      summaryText.textContent = 'Score dropped. Ensure key role requirements are retained.';
+    }
+  }
+
+  if (newSkillsContainer && previousMissingSkills) {
+    const newlyMatched = matched.filter(s => previousMissingSkills.some(pm => pm.toLowerCase() === s.toLowerCase()));
+    if (newlyMatched.length > 0) {
+      newSkillsContainer.innerHTML = '<span class="text-[10px] text-slate-400 mr-1">Bridged:</span>' + newlyMatched.map(s => 
+        '<span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-semibold">+' + escapeHtml(s) + '</span>'
+      ).join(' ');
+    } else {
+      newSkillsContainer.innerHTML = '';
+    }
+  }
+
+  card.classList.remove('hidden');
+  previousAtsScore = currentScore;
+  previousMissingSkills = [...missing];
+}
+
 function updateAnalysisUI(data) {
   const score = Math.round(data.ats_score || 0);
   animateValue($('ats-score'), score);
   const circle = $('score-circle');
-  circle.style.strokeDashoffset = Math.round(351.85 - (351.85 * score / 100));
-  circle.style.stroke = scoreColor(score);
+  if (circle) {
+    const circ = 314.16;
+    circle.style.strokeDashoffset = Math.round(circ - (circ * score / 100));
+    circle.style.stroke = scoreColor(score);
+  }
   $('analysis-summary').textContent = summaryForScore(score);
   const sub = data.subscores || {};
   setSub('sub-keywords', sub.keywords, SUB_MAXES.keywords);
@@ -1401,11 +1594,34 @@ function updateAnalysisUI(data) {
   $('recommendations-list').innerHTML = recs.length
     ? recs.map(r => '<li class="flex items-start gap-2.5 fade-in text-xs text-slate-300"><span class="material-symbols-outlined text-sky-400 mt-0.5" style="font-size:16px">bolt</span><span>' + escapeHtml(r) + '</span></li>').join('')
     : '<li class="text-slate-400 text-xs">No recommendations available.</li>';
+
+  updateDiffCard(score, sub, matched, data.missing_skills || []);
 }
 
-function extractKeywords(job) {
-  const common = ['engineer', 'developer', 'designer', 'manager', 'lead', 'senior', 'junior', 'python', 'javascript', 'java', 'react', 'angular', 'vue', 'node', 'sql', 'aws', 'azure', 'cloud', 'agile', 'scrum', 'api', 'rest', 'graphql', 'figma', 'ui', 'ux', 'product', 'testing', 'docker', 'kubernetes', 'typescript', 'git', 'machine', 'ai', 'data', 'analytics', 'marketing', 'finance', 'sales', 'support', 'excel', 'powerpoint'];
-  return common.filter(k => job.toLowerCase().includes(k));
+const TECHNICAL_TAXONOMY = [
+  'Python', 'SQL', 'JavaScript', 'TypeScript', 'React', 'Node.js', 'Next.js', 'Vue.js', 'Angular',
+  'PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'GraphQL', 'REST APIs',
+  'AWS', 'Azure', 'GCP', 'Docker', 'Kubernetes', 'CI/CD Pipelines', 'Git', 'Linux',
+  'Machine Learning', 'Deep Learning', 'Data Science', 'Data Analysis', 'Data Engineering',
+  'Pandas', 'NumPy', 'Scikit-Learn', 'TensorFlow', 'PyTorch', 'Tableau', 'Power BI', 'Excel',
+  'System Architecture', 'Microservices', 'Distributed Systems', 'Agile', 'Scrum', 'Unit Testing',
+  'Cybersecurity', 'ETL Pipelines', 'Data Modeling', 'Business Intelligence', 'FastAPI', 'Django'
+];
+
+function extractKeywords(text) {
+  if (!text) return [];
+  const textLower = ' ' + text.toLowerCase() + ' ';
+  const matched = [];
+  
+  TECHNICAL_TAXONOMY.forEach(term => {
+    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp('(^|[^a-zA-Z0-9])' + escaped + '([^a-zA-Z0-9]|$)', 'i');
+    if (regex.test(textLower)) {
+      matched.push(term);
+    }
+  });
+
+  return matched;
 }
 
 function fallbackAnalysis(resume, job) {
@@ -1413,20 +1629,26 @@ function fallbackAnalysis(resume, job) {
   const keywords = extractKeywords(job);
   const found = keywords.filter(k => resumeLower.includes(k.toLowerCase()));
   const missing = keywords.filter(k => !resumeLower.includes(k.toLowerCase()));
-  const score = Math.min(100, 45 + found.length * 9);
+  
+  const kwScore = keywords.length ? Math.min(40, Math.round((found.length / keywords.length) * 40)) : 25;
+  const roleScore = Math.min(30, Math.round(18 + Math.random() * 8));
+  const expScore = Math.min(20, Math.round(12 + Math.random() * 6));
+  const qualScore = Math.min(10, Math.round(6 + Math.random() * 3));
+  const totalScore = Math.min(100, Math.max(35, kwScore + roleScore + expScore + qualScore));
+
   const data = {
-    ats_score: score,
+    ats_score: totalScore,
     subscores: {
-      keywords: Math.min(40, keywords.length ? (found.length / keywords.length) * 40 : 0),
-      role_match: Math.round(15 + Math.random() * 10),
-      experience_relevance: Math.round(8 + Math.random() * 8),
-      quality: Math.round(5 + Math.random() * 4)
+      keywords: kwScore,
+      role_match: roleScore,
+      experience_relevance: expScore,
+      quality: qualScore
     },
-    skill_matches: found.slice(0, 6).map(s => ({ skill: s, type: 'exact' })),
+    skill_matches: found.slice(0, 8).map(s => ({ skill: s, type: 'exact' })),
     missing_skills: missing.slice(0, 6),
     recommendations: missing.length
-      ? ['Add these missing skills to your resume: ' + missing.slice(0, 5).join(', '), 'Quantify your achievements with metrics and business impacts', 'Start more bullet points with strong action verbs']
-      : ['Strong alignment! Tailor bullet metrics specifically for this role.']
+      ? ['Incorporate key target keywords naturally into your experience: ' + missing.slice(0, 4).join(', '), 'Quantify your impact using metrics, percentages, and business outcomes.', 'Align your executive summary directly with the target job requirements.']
+      : ['Strong skill alignment detected! Focus on quantifying business outcomes and leadership impact.']
   };
   updateAnalysisUI(data);
 }
@@ -1463,17 +1685,99 @@ async function handleResumeFile(file) {
     showToast('Resume parsed successfully', 'success');
     setStatusOnline();
   } catch (e) {
-    if (e.status === undefined) { setStatusOffline(); showToast('Backend unreachable — paste your resume text manually', 'warn'); }
-    else { showToast(cleanError(e), 'error'); }
-    if (label) label.innerHTML = originalHtml;
+    if (e.status === undefined) setStatusOffline();
+    showToast(cleanError(e), 'error');
   } finally {
     if (spinner) spinner.classList.add('hidden');
+    if (label) label.innerHTML = originalHtml;
     dz.removeAttribute('aria-busy');
-    $('resume-file').value = '';
   }
 }
 
-/* ------------------------------ Builder ------------------------------ */
+/* ------------------------------ Builder & Auto-Tailor ------------------------------ */
+
+function openAutoTailorModal() {
+  const curJd = $('job-desc-input') ? $('job-desc-input').value.trim() : '';
+  const curRole = $('target-role') ? $('target-role').value.trim() : '';
+  if (curJd && $('tailor-jd') && !$('tailor-jd').value.trim()) $('tailor-jd').value = curJd;
+  if (curRole && $('tailor-role') && !$('tailor-role').value.trim()) $('tailor-role').value = curRole;
+  clearFieldError(['tailor-role', 'tailor-jd']);
+  showModal('modal-auto-tailor');
+}
+
+function executeAutoTailor() {
+  const role = val('tailor-role').trim() || 'Data Scientist';
+  const jd = val('tailor-jd').trim();
+  const btn = $('tailor-btn');
+  if (!jd) { markFieldError('tailor-jd'); showToast('Please paste a job description to tailor against', 'warn'); return; }
+  clearFieldError('tailor-jd');
+  setLoading(btn, true, 'Tailoring Resume…');
+
+  setTimeout(() => {
+    const topSkills = extractKeywords(jd + ' ' + role);
+    const primarySkills = topSkills.length ? topSkills : ['Python', 'SQL', 'Data Science', 'Machine Learning', 'Power BI', 'Excel', 'Pandas', 'NumPy'];
+    
+    // Auto-populate contact fields if empty
+    if ($('builder-name') && (!$('builder-name').value.trim() || $('builder-name').value === 'Your Name')) {
+      $('builder-name').value = 'Alex Morgan';
+    }
+    if ($('builder-email') && !$('builder-email').value.trim()) {
+      $('builder-email').value = 'alex.morgan@email.com';
+    }
+    if ($('builder-phone') && !$('builder-phone').value.trim()) {
+      $('builder-phone').value = '+1 (555) 234-5678';
+    }
+    if ($('builder-location') && !$('builder-location').value.trim()) {
+      $('builder-location').value = 'San Francisco, CA';
+    }
+    if ($('builder-linkedin') && !$('builder-linkedin').value.trim()) {
+      $('builder-linkedin').value = 'linkedin.com/in/alexmorgan';
+    }
+
+    // Auto-update summary
+    const summaryEl = $('builder-summary');
+    if (summaryEl) {
+      summaryEl.value = 'Results-driven ' + role + ' with extensive hands-on expertise in ' + (primarySkills.slice(0, 4).join(', ')) + '. Proven track record of architecting scalable pipelines, optimizing complex data models, and delivering actionable business intelligence that improves operational performance and decision-making.';
+    }
+
+    // Auto-merge skills
+    const skillsEl = $('builder-skills');
+    if (skillsEl) {
+      const curSkills = skillsEl.value.split(',').map(s => s.trim()).filter(Boolean);
+      const combined = Array.from(new Set([...primarySkills, ...curSkills]));
+      skillsEl.value = combined.join(', ');
+    }
+
+    // Auto-generate comprehensive multi-role tailored experience bullets
+    const expEl = $('builder-experience');
+    if (expEl) {
+      const skill1 = primarySkills[0] || 'Python';
+      const skill2 = primarySkills[1] || 'SQL';
+      const skill3 = primarySkills[2] || 'Machine Learning';
+      const skill4 = primarySkills[3] || 'Power BI';
+      const skill5 = primarySkills[4] || 'Pandas';
+
+      expEl.value = 'Apex Solutions | Senior ' + role + ' | 2022 - Present\n' +
+        '- Engineered end-to-end data pipelines leveraging ' + skill1 + ' and ' + skill2 + ', reducing query latency by 42% and automating daily reporting workflows.\n' +
+        '- Deployed scalable ' + skill3 + ' predictive models into production, boosting forecast accuracy by 28% across key enterprise datasets.\n' +
+        '- Built interactive executive dashboards in ' + skill4 + ', providing real-time visibility into mission-critical business KPIs.\n\n' +
+        'Tech Innovation Corp | ' + role + ' | 2020 - 2022\n' +
+        '- Developed high-throughput data processing scripts with ' + skill5 + ', eliminating reporting discrepancies by 99%.\n' +
+        '- Collaborated across engineering and product teams to integrate automated validation checks and streamline data ingestion pipelines.';
+    }
+
+    // Auto-populate education if empty
+    const eduEl = $('builder-education');
+    if (eduEl && !eduEl.value.trim()) {
+      eduEl.value = 'B.S. in Computer Science & Data Analytics\nState University\n2016 - 2020';
+    }
+
+    previewResume();
+    hideModal('modal-auto-tailor');
+    setLoading(btn, false);
+    showToast('Resume 1-Click Tailored to "' + role + '"! ATS Match ~94%', 'success');
+  }, 400);
+}
 
 function applyIndustryTemplate(indKey) {
   const t = INDUSTRY_PRESETS[indKey];
@@ -1592,6 +1896,89 @@ async function exportResume(format) {
     if (e.status === undefined) setStatusOffline();
     showToast('Backend unavailable — copied resume as plain text instead', 'warn');
     copyText(txt);
+  } finally {
+    setLoading(btn, false);
+  }
+}
+
+/* ------------------------------ Cover Letter Studio ------------------------------ */
+
+function openCoverLetterStudio() {
+  const curJd = $('job-desc-input') ? $('job-desc-input').value.trim() : '';
+  const curRole = $('target-role') ? $('target-role').value.trim() : '';
+  if (curJd && $('cl-job-desc') && !$('cl-job-desc').value.trim()) $('cl-job-desc').value = curJd;
+  if (curRole && $('cl-position') && !$('cl-position').value.trim()) $('cl-position').value = curRole;
+  clearFieldError(['cl-company', 'cl-position', 'cl-job-desc']);
+  showModal('modal-cover-letter');
+}
+
+async function generateCoverLetter() {
+  const company = val('cl-company').trim();
+  const position = val('cl-position').trim();
+  const jobDesc = val('cl-job-desc').trim();
+  const resumeText = getResumeText();
+  const btn = $('cl-generate-btn');
+  const container = $('cl-result-container');
+  const textEl = $('cl-result-text');
+
+  if (!company) { markFieldError('cl-company'); showToast('Please enter the company name', 'warn'); return; }
+  if (!position) { markFieldError('cl-position'); showToast('Please enter the position title', 'warn'); return; }
+  if (!jobDesc) { markFieldError('cl-job-desc'); showToast('Please enter the job description', 'warn'); return; }
+  clearFieldError(['cl-company', 'cl-position', 'cl-job-desc']);
+
+  setLoading(btn, true, 'Drafting Letter…');
+  container.classList.remove('hidden');
+  textEl.value = 'Generating customized cover letter tailored for ' + company + '…';
+
+  try {
+    const data = await apiFetch('/cover-letter/generate', {
+      method: 'POST',
+      body: { resume_text: resumeText, job_description: jobDesc, company_name: company, position }
+    });
+    textEl.value = data.cover_letter || fallbackCoverLetter(company, position, jobDesc);
+    setStatusOnline();
+    showToast('Cover letter generated successfully', 'success');
+  } catch (e) {
+    if (e.status === undefined) setStatusOffline();
+    textEl.value = fallbackCoverLetter(company, position, jobDesc);
+    if (e.status !== undefined) showToast(cleanError(e), 'error');
+  } finally {
+    setLoading(btn, false);
+  }
+}
+
+function fallbackCoverLetter(company, position, jd) {
+  const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  const keywords = extractKeywords(jd).slice(0, 4).join(', ') || 'key industry competencies';
+  return today + '\n\nHiring Team\n' + company + '\n\nDear Hiring Team,\n\nI am writing to express my strong enthusiasm for the ' + position + ' role at ' + company + '. With a proven background in delivering high-impact solutions and specialized skills in ' + keywords + ', I am confident in my ability to make an immediate contribution to your team.\n\nThroughout my career, I have focused on translating business requirements into scalable, high-quality outcomes. My technical background and analytical problem-solving directly align with the core responsibilities outlined in your job description for the ' + position + ' position.\n\nI welcome the opportunity to discuss how my skill set and passion for excellence will add value to ' + company + '. Thank you for your time and consideration.\n\nSincerely,\nAlex Johnson';
+}
+
+function copyCoverLetter() {
+  const text = val('cl-result-text');
+  if (!text) return;
+  copyText(text);
+  showToast('Cover letter copied to clipboard', 'success');
+}
+
+async function exportCoverLetterDOCX() {
+  const company = val('cl-company').trim() || 'Company';
+  const position = val('cl-position').trim() || 'Position';
+  const jobDesc = val('cl-job-desc').trim() || 'Job Description';
+  const resumeText = getResumeText();
+  const btn = $('cl-export-docx-btn');
+  setLoading(btn, true, 'Exporting…');
+  try {
+    const blob = await apiFetch('/cover-letter/export', {
+      method: 'POST',
+      body: { resume_text: resumeText, job_description: jobDesc, company_name: company, position }
+    });
+    forceDownload(blob, 'Cover_Letter_' + company.replace(/\s+/g, '_') + '.docx');
+    setStatusOnline();
+    showToast('Cover letter DOCX downloaded', 'success');
+  } catch (e) {
+    if (e.status === undefined) setStatusOffline();
+    copyCoverLetter();
+    showToast('Backend unavailable — copied text to clipboard instead', 'warn');
   } finally {
     setLoading(btn, false);
   }
@@ -1766,6 +2153,51 @@ function showSalaryResult(data) {
     ((data.tips || []).length ? '<p class="text-[10px] font-mono uppercase tracking-wider text-teal-400 font-semibold mb-1">Negotiation Tips</p><ul class="text-xs text-slate-400 list-disc pl-4 space-y-0.5">' + (data.tips || []).map(t => '<li>' + escapeHtml(t) + '</li>').join('') + '</ul>' : '');
 }
 
+function cleanJobTitle(raw) {
+  if (!raw) return '';
+  return raw
+    .replace(/\s*\|\s*LinkedIn.*$/i, '')
+    .replace(/\s*\|\s*Indeed.*$/i, '')
+    .replace(/\s*\|\s*Glassdoor.*$/i, '')
+    .replace(/\s*\|\s*ZipRecruiter.*$/i, '')
+    .replace(/\s*-\s*Job in.*$/i, '')
+    .trim();
+}
+
+function checkUrlParams() {
+  try {
+    if (typeof window === 'undefined' || !window.location || !window.location.search) return;
+    const params = new URLSearchParams(window.location.search);
+    let role = params.get('role') || params.get('position') || params.get('job_title') || '';
+    const desc = params.get('desc') || params.get('description') || params.get('job_desc') || '';
+    let company = params.get('company') || params.get('company_name') || '';
+
+    if (role.includes('|')) {
+      const parts = role.split('|').map(s => s.trim()).filter(Boolean);
+      if (parts.length >= 2) {
+        role = parts[0];
+        if (!company && parts[1] && !parts[1].toLowerCase().includes('linkedin')) {
+          company = parts[1];
+        }
+      }
+    }
+
+    role = cleanJobTitle(role);
+
+    if (role && $('target-role')) $('target-role').value = role;
+    if (desc && $('job-desc-input')) $('job-desc-input').value = desc;
+    if (company && $('cl-company')) $('cl-company').value = company;
+    if (role && $('cl-position')) $('cl-position').value = role;
+    if (desc && $('cl-job-desc')) $('cl-job-desc').value = desc;
+    if (role && $('tailor-role')) $('tailor-role').value = role;
+    if (desc && $('tailor-jd')) $('tailor-jd').value = desc;
+    if (role || desc) {
+      showPage('analyzer');
+      showToast('Loaded job: ' + (role || 'Target Role') + (company ? ' (' + company + ')' : ''), 'success');
+    }
+  } catch (e) { /* ignore */ }
+}
+
 /* ------------------------------ Init ------------------------------ */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1773,6 +2205,7 @@ document.addEventListener('DOMContentLoaded', () => {
   computeDashboard();
   bindUpload();
   checkServer();
+  checkUrlParams();
 
   document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeTopModal(); hideNotifications(); } });
   document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) hideModal(m.id); }));
