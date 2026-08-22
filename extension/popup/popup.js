@@ -1,6 +1,6 @@
 // ResumeGPT Scanner - Advanced Popup Logic
 
-const API_BASE = "http://localhost:8000";
+const FALLBACK_API_BASE = "https://resumegpt.onrender.com";
 
 const TECHNICAL_TAXONOMY = [
   "Python", "SQL", "JavaScript", "TypeScript", "React", "Node.js", "Next.js", "Vue.js", "Angular",
@@ -232,13 +232,14 @@ function handleJobPaste() {
   }
 }
 
-function openInFullStudio() {
+async function openInFullStudio() {
   const params = new URLSearchParams();
   if (detectedRole) params.set("role", detectedRole);
   if (detectedCompany) params.set("company", detectedCompany);
   if (jobDescription) params.set("desc", jobDescription.substring(0, 4000));
 
-  const url = `${API_BASE}?${params.toString()}`;
+  const base = typeof getApiBase === "function" ? await getApiBase() : FALLBACK_API_BASE;
+  const url = `${base}?${params.toString()}`;
   if (typeof chrome !== "undefined" && chrome.tabs && chrome.tabs.create) {
     chrome.tabs.create({ url: url });
   } else {

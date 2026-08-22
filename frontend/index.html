@@ -1418,7 +1418,7 @@ html.light #file-dropzone:hover {
             <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-400 text-sm">check</span>ATS-Compliant PDF & DOCX Compilers</li>
           </ul>
         </div>
-        <button onclick="showToast('Upgrade portal initialized! (Demo mode)', 'success'); hideModal('modal-pricing');" class="btn btn-primary w-full mt-6 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 border-amber-400/30 text-white font-bold">Unlock Pro Access</button>
+        <button id="upgrade-pro-btn" onclick="initiateCheckout('pro')" class="btn btn-primary w-full mt-6 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 border-amber-400/30 text-white font-bold">Unlock Pro Access</button>
       </div>
     </div>
 
@@ -1429,7 +1429,11 @@ html.light #file-dropzone:hover {
 </div>
 
 <script>
-const API_BASE = 'http://localhost:8000';
+const API_BASE = (typeof window !== 'undefined' && window.RESUMEGPT_CONFIG && window.RESUMEGPT_CONFIG.API_BASE)
+  ? window.RESUMEGPT_CONFIG.API_BASE
+  : ((typeof window !== 'undefined' && window.location && window.location.origin && window.location.origin.startsWith('http'))
+      ? window.location.origin
+      : '');
 const STORAGE_JOBS = 'resumegpt_jobs';
 const STORAGE_TOKEN = 'resumegpt_token';
 
@@ -2775,6 +2779,38 @@ function loadRoleDemo(roleKey) {
     if ($('resume-input')) $('resume-input').value = sampleResume;
     showPage('analyzer');
     showToast('Loaded Technical Product Manager preset demo!', 'success');
+  }
+}
+
+/* ------------------------------ Billing & Subscription Engine ------------------------------ */
+
+async function initiateCheckout(plan = 'pro') {
+  showToast('Connecting to secure Stripe checkout...', 'info');
+  try {
+    const res = await fetch(`${API_BASE}/billing/create-checkout-session`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(atsToken ? { 'Authorization': `Bearer ${atsToken}` } : {})
+      },
+      body: JSON.stringify({
+        plan: plan,
+        success_url: (typeof window !== 'undefined' ? window.location.origin : '') + '/?billing=success',
+        cancel_url: (typeof window !== 'undefined' ? window.location.origin : '') + '/?billing=cancelled'
+      })
+    });
+    if (!res.ok) throw new Error('Could not create checkout session');
+    const data = await res.json();
+    if (data.checkout_url) {
+      if (data.mode === 'live') {
+        window.location.href = data.checkout_url;
+      } else {
+        showToast('Demo Checkout: Stripe session generated (' + data.session_id + ')', 'success');
+        hideModal('modal-pricing');
+      }
+    }
+  } catch (err) {
+    showToast(err.message || 'Billing service unreachable', 'error');
   }
 }
 

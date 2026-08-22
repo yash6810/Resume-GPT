@@ -13,9 +13,11 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from datetime import datetime
 import os
+import logging
 from dotenv import load_dotenv
 
 load_dotenv()
+logger = logging.getLogger(__name__)
 
 # Database configuration - supports both SQLite and PostgreSQL
 # Set DATABASE_URL in .env to switch between them
@@ -55,6 +57,10 @@ class User(Base):
     username = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     full_name = Column(String, nullable=True)
+    plan = Column(String, default="free", nullable=False)  # free, pro, enterprise
+    stripe_customer_id = Column(String, nullable=True, index=True)
+    stripe_subscription_id = Column(String, nullable=True, index=True)
+    subscription_status = Column(String, default="active", nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -150,6 +156,23 @@ User.ab_tests = relationship(
 # Create tables
 def init_db():
     Base.metadata.create_all(bind=engine)
+    # Lightweight SQLite schema migration for added columns
+    try:
+        with engine.connect() as conn:
+            if engine.dialect.name == "sqlite":
+                cursor = conn.exec_driver_sql("PRAGMA table_info(users)")
+                existing_cols = [row[1] for row in cursor.fetchall()]
+                if "plan" not in existing_cols:
+                    conn.exec_driver_sql("ALTER TABLE users ADD COLUMN plan VARCHAR DEFAULT 'free'")
+                if "stripe_customer_id" not in existing_cols:
+                    conn.exec_driver_sql("ALTER TABLE users ADD COLUMN stripe_customer_id VARCHAR")
+                if "stripe_subscription_id" not in existing_cols:
+                    conn.exec_driver_sql("ALTER TABLE users ADD COLUMN stripe_subscription_id VARCHAR")
+                if "subscription_status" not in existing_cols:
+                    conn.exec_driver_sql("ALTER TABLE users ADD COLUMN subscription_status VARCHAR DEFAULT 'active'")
+                conn.commit()
+    except Exception as e:
+        logger.warning(f"Database schema auto-migration note: {e}")
 
 
 # Dependency to get DB session
