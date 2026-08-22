@@ -32,6 +32,7 @@ htmlcov/
 model_*/
 backend/data/ner_datasets/
 backend/models/
+data/custom_resume_ner/
 *.bin
 *.tar.gz
 *.zip
