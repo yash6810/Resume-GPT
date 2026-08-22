@@ -12,3 +12,7 @@ services:
         value: 8000
       - key: DEBUG
         value: "False"
+      - key: ENVIRONMENT
+        value: production
+      - key: JWT_SECRET
+        generateValue: true

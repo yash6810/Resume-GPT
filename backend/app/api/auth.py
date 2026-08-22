@@ -14,7 +14,26 @@ from app.models.schemas import UserCreate, UserLogin, UserResponse, Token
 router = APIRouter()
 
 # Security configuration - use environment variable
-SECRET_KEY = os.getenv("JWT_SECRET", "resumegpt-secret-key-change-in-production")
+INSECURE_FALLBACK_SECRET = "resumegpt-secret-key-change-in-production"
+
+
+def get_jwt_secret() -> str:
+    secret = os.getenv("JWT_SECRET")
+    env = os.getenv("ENVIRONMENT", "development").lower()
+    if env == "production":
+        if not secret or secret == INSECURE_FALLBACK_SECRET or len(secret) < 32:
+            raise RuntimeError(
+                "FATAL SECURITY ERROR: JWT_SECRET environment variable is missing, using insecure default, "
+                "or shorter than 32 characters in production mode. "
+                "Generate a cryptographically secure key with: openssl rand -hex 32"
+            )
+        return secret
+    if not secret:
+        return INSECURE_FALLBACK_SECRET
+    return secret
+
+
+SECRET_KEY = get_jwt_secret()
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 

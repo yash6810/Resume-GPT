@@ -30,6 +30,7 @@ from app.api import (
     ats_simulator,
     ab_test,
     email,
+    billing,
 )
 from app.core.skills_loader import load_skills
 from app.core.database import init_db
@@ -127,6 +128,7 @@ app.include_router(
 )
 app.include_router(ab_test.router, prefix="/ab-test", tags=["A/B Testing"])
 app.include_router(email.router, prefix="/email", tags=["Email"])
+app.include_router(billing.router, tags=["Billing & Subscriptions"])
 
 
 from fastapi.staticfiles import StaticFiles

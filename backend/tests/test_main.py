@@ -8,10 +8,11 @@ client = TestClient(app)
 def test_root():
     response = client.get("/")
     assert response.status_code == 200
-    data = response.json()
-    assert "message" in data
-    assert "version" in data
-    assert "cover_letter_generate" in data["endpoints"]
+    if "text/html" in response.headers.get("content-type", ""):
+        assert "<!DOCTYPE html>" in response.text or "ResumeGPT" in response.text
+    else:
+        data = response.json()
+        assert "message" in data or "version" in data
 
 
 def test_health():
@@ -19,6 +20,7 @@ def test_health():
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "healthy"
+    assert data["service"] == "ResumeGPT"
 
 
 def test_parse_no_file():

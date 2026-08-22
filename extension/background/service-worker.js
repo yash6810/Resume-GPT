@@ -1,11 +1,22 @@
 // ResumeGPT Scanner - Background Service Worker
+try {
+  importScripts("../config.js");
+} catch (e) {
+  // Fallback for non-service worker contexts
+}
 
-const API_BASE = "http://localhost:8000";
+const FALLBACK_API_BASE = "https://resumegpt.onrender.com";
+
+async function resolveApiBase() {
+  if (typeof getApiBase === "function") {
+    return await getApiBase();
+  }
+  return FALLBACK_API_BASE;
+}
 
 // Listen for messages from content scripts
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "openPopup") {
-    // Open the popup programmatically
     chrome.action.openPopup();
   }
 
@@ -23,7 +34,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 // Check if backend API is running
 async function checkApiStatus() {
   try {
-    const response = await fetch(`${API_BASE}/health`, {
+    const apiBase = await resolveApiBase();
+    const response = await fetch(`${apiBase}/health`, {
       method: "GET",
       signal: AbortSignal.timeout(3000),
     });
@@ -36,7 +48,8 @@ async function checkApiStatus() {
 // Analyze resume against job description
 async function analyzeResume(resumeText, jobText) {
   try {
-    const response = await fetch(`${API_BASE}/analyze/quick`, {
+    const apiBase = await resolveApiBase();
+    const response = await fetch(`${apiBase}/analyze/quick`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

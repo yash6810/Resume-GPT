@@ -4,7 +4,7 @@
 ### **Next-Generation AI Resume Analyzer, ATS Booster & Career Intelligence Suite**
 
 <p align="center">
-  <a href="https://github.com/yash6810/Resume-GPT/actions"><img src="https://img.shields.io/badge/Tests-34%2F34%20Passing-10b981?style=for-the-badge&logo=githubactions&logoColor=white" alt="Tests"></a>
+  <a href="https://github.com/yash6810/Resume-GPT/actions"><img src="https://github.com/yash6810/Resume-GPT/actions/workflows/ci.yml/badge.svg" alt="CI Status"></a>
   <a href="https://github.com/yash6810/Resume-GPT"><img src="https://img.shields.io/badge/Python-3.10%2B-0ea5e9?style=for-the-badge&logo=python&logoColor=white" alt="Python"></a>
   <a href="https://fastapi.tiangolo.com"><img src="https://img.shields.io/badge/FastAPI-Production%20Ready-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI"></a>
   <a href="https://colab.research.google.com/github/yash6810/Resume-GPT/blob/main/notebooks/train_ner_finetune.ipynb"><img src="https://img.shields.io/badge/Colab-GPU%20Ready-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white" alt="Colab"></a>
