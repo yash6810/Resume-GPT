@@ -143,8 +143,8 @@ body {
     padding: .65rem .875rem; 
     border: 1px solid rgba(255, 255, 255, 0.1); 
     border-radius: .625rem; 
-    background-color: #0b1120 !important; 
-    color: #f8fafc !important; 
+    background-color: #0b1120; 
+    color: #f8fafc; 
     font-size: .875rem;
     transition: border-color .2s, box-shadow .2s, background-color .2s; 
 }
@@ -153,12 +153,17 @@ body {
     outline: none; 
     border-color: #0ea5e9; 
     box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2); 
-    background-color: #0b1120 !important; 
-    color: #ffffff !important;
+    background-color: #0b1120; 
+    color: #ffffff; 
 }
 .field.field-error, .field-error { 
     border-color: #f43f5e !important; 
     box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.2) !important; 
+}
+
+/* Toast styling - always crisp white text */
+.toast, .toast span, .toast p, .toast div {
+    color: #ffffff !important;
 }
 
 /* Override browser autofill bright white backgrounds */
@@ -204,6 +209,7 @@ html.light aside {
 
 html.light main {
     background-color: #f8fafc !important;
+    color: #0f172a !important;
 }
 
 /* Top Quick Command Bar & Headers */
@@ -216,6 +222,7 @@ html.light nav[class*="bg-slate-950"] {
 
 /* Cards & Panels */
 html.light .glass-card {
+    background-color: #ffffff !important;
     background: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 4px 12px 0 rgba(0, 0, 0, 0.03) !important;
@@ -236,7 +243,8 @@ html.light [class*="bg-slate-800"] {
 
 /* Specific Card Headers and Inner Panels */
 html.light .glass-card div[class*="bg-slate-900"],
-html.light .glass-card div[class*="bg-slate-950"] {
+html.light .glass-card div[class*="bg-slate-950"],
+html.light .glass-card div[class*="bg-slate-100"] {
     background-color: #f8fafc !important;
     border-color: #e2e8f0 !important;
 }
@@ -334,18 +342,6 @@ html.light .modal > div {
     background-color: #ffffff !important;
     border-color: #e2e8f0 !important;
     box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.15) !important;
-}
-
-/* Toasts */
-html.light .toast {
-    background-color: #ffffff !important;
-    color: #0f172a !important;
-    border: 1px solid #cbd5e1 !important;
-    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.12) !important;
-}
-
-html.light .toast p, html.light .toast span {
-    color: #0f172a !important;
 }
 
 /* Diff card in light mode */
