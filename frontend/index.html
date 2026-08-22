@@ -233,6 +233,10 @@ select:-webkit-autofill {
 <span class="material-symbols-outlined">work_history</span><span>Job Tracker</span></a>
 <a href="javascript:void(0)" onclick="showPage('aitools')" class="nav-link flex items-center gap-3 px-3.5 py-2.5 text-slate-400 hover:text-white hover:bg-white/5 transition-all rounded-xl font-medium text-sm" data-page="aitools">
 <span class="material-symbols-outlined">psychology</span><span>AI Career Tools</span></a>
+<a href="javascript:void(0)" onclick="showModal('modal-pricing')" class="nav-link flex items-center justify-between px-3.5 py-2.5 text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 transition-all rounded-xl font-semibold text-sm border border-amber-500/20 mt-1">
+<div class="flex items-center gap-3"><span class="material-symbols-outlined text-amber-400">diamond</span><span>Pro Plans</span></div>
+<span class="text-[10px] uppercase font-mono font-bold px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300">Upgrade</span>
+</a>
 </nav>
 
 <div class="mt-auto flex flex-col gap-3">
@@ -260,11 +264,40 @@ select:-webkit-autofill {
 <!-- Main Content -->
 <main class="flex-1 md:ml-64 flex flex-col h-full relative overflow-hidden bg-slate-950">
 
+<!-- Top Quick Command Bar (Desktop) -->
+<div class="hidden md:flex items-center justify-between px-8 py-3 border-b border-white/10 bg-slate-950/75 backdrop-blur-xl z-30 shrink-0">
+  <div class="flex items-center gap-3">
+    <button onclick="openCommandPalette()" class="flex items-center gap-3 px-3.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-white/10 text-slate-400 hover:text-white text-xs font-mono transition shadow-sm group cursor-pointer">
+      <span class="material-symbols-outlined text-sm text-sky-400 group-hover:rotate-12 transition-transform">search</span>
+      <span>Quick Search / Commands...</span>
+      <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-white/10 text-[10px] text-slate-300 font-sans shadow">Ctrl + K</kbd>
+    </button>
+    <div class="h-4 w-px bg-white/10"></div>
+    <div class="flex items-center gap-1.5 text-xs text-slate-400">
+      <span class="text-[11px] uppercase font-mono tracking-wider font-semibold text-slate-500">1-Click Demos:</span>
+      <button onclick="loadRoleDemo('swe')" class="px-2 py-1 rounded-lg bg-white/5 hover:bg-sky-500/20 hover:text-sky-300 text-slate-300 text-[11px] font-medium transition border border-white/5 hover:border-sky-500/30">💻 Full-Stack</button>
+      <button onclick="loadRoleDemo('data')" class="px-2 py-1 rounded-lg bg-white/5 hover:bg-teal-500/20 hover:text-teal-300 text-slate-300 text-[11px] font-medium transition border border-white/5 hover:border-teal-500/30">📊 Data/AI</button>
+      <button onclick="loadRoleDemo('pm')" class="px-2 py-1 rounded-lg bg-white/5 hover:bg-amber-500/20 hover:text-amber-300 text-slate-300 text-[11px] font-medium transition border border-white/5 hover:border-amber-500/30">🎯 Product</button>
+    </div>
+  </div>
+  <div class="flex items-center gap-3">
+    <button onclick="showModal('modal-pricing')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/15 to-orange-500/15 hover:from-amber-500/25 hover:to-orange-500/25 border border-amber-500/30 text-amber-300 text-xs font-semibold shadow-sm transition">
+      <span class="material-symbols-outlined text-sm text-amber-400">diamond</span>
+      <span>Pro Pass</span>
+    </button>
+    <button onclick="toggleNotifications()" aria-label="Notifications" class="material-symbols-outlined text-slate-400 hover:text-white p-1.5 hover:bg-white/5 rounded-lg transition text-lg cursor-pointer">notifications</button>
+  </div>
+</div>
+
 <!-- DASHBOARD PAGE -->
 <div id="page-dashboard" class="page active flex-1 overflow-y-auto p-6 md:p-10">
 <div class="max-w-6xl mx-auto space-y-8">
 <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-white/5">
 <div>
+<div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px] font-mono font-semibold mb-2">
+  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+  <span>AI ATS Scoring Engine v2.0 Active</span>
+</div>
 <h1 class="text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">Executive Dashboard</h1>
 <p class="text-sm text-slate-400 mt-1">Accelerate your interview callbacks with real-time ATS optimization.</p>
 </div>
@@ -1043,6 +1076,132 @@ select:-webkit-autofill {
 <a href="javascript:void(0)" onclick="showPage('aitools')" class="bn-link flex flex-col items-center justify-center text-slate-400" data-page="aitools">
 <span class="material-symbols-outlined">psychology</span><span class="text-[10px] font-medium mt-0.5">AI</span></a>
 </nav>
+
+<!-- Command Palette Modal (Ctrl + K) -->
+<div id="modal-cmd-palette" class="modal fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="cmd-title">
+  <div class="bg-slate-900 border border-white/15 rounded-2xl max-w-xl w-full mx-4 shadow-2xl overflow-hidden">
+    <div class="p-4 border-b border-white/10 flex items-center gap-3 bg-slate-950/50">
+      <span class="material-symbols-outlined text-sky-400">search</span>
+      <input type="text" id="cmd-search-input" oninput="filterCommandPalette()" class="bg-transparent border-none outline-none text-white text-sm w-full placeholder-slate-500 font-medium" placeholder="Type a command or jump to feature... (e.g. 'analyze', 'builder', 'demo')">
+      <kbd class="px-2 py-0.5 rounded bg-slate-800 border border-white/10 text-[10px] text-slate-400 font-mono">ESC</kbd>
+    </div>
+    <div id="cmd-items-list" class="max-h-80 overflow-y-auto p-2 space-y-1">
+      <button onclick="executeCommand('page-analyzer')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/5 text-left text-slate-200 group transition">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-sky-400 text-lg">analytics</span>
+          <div>
+            <div class="text-xs font-bold text-white">Run ATS Resume Analysis</div>
+            <div class="text-[11px] text-slate-400">Scan keyword alignment and score compatibility</div>
+          </div>
+        </div>
+        <span class="text-[10px] font-mono text-slate-500">Jump</span>
+      </button>
+      <button onclick="executeCommand('page-builder')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/5 text-left text-slate-200 group transition">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-teal-400 text-lg">edit_note</span>
+          <div>
+            <div class="text-xs font-bold text-white">Resume Builder & Studio</div>
+            <div class="text-[11px] text-slate-400">Edit sections and export PDF/DOCX</div>
+          </div>
+        </div>
+        <span class="text-[10px] font-mono text-slate-500">Jump</span>
+      </button>
+      <button onclick="executeCommand('auto-tailor')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/5 text-left text-slate-200 group transition">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-amber-400 text-lg">auto_fix_high</span>
+          <div>
+            <div class="text-xs font-bold text-white">1-Click JD Auto-Tailor</div>
+            <div class="text-[11px] text-slate-400">Tailor summary, skills and bullets to any job description</div>
+          </div>
+        </div>
+        <span class="text-[10px] font-mono text-slate-500">Action</span>
+      </button>
+      <button onclick="executeCommand('cover-letter')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/5 text-left text-slate-200 group transition">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-emerald-400 text-lg">description</span>
+          <div>
+            <div class="text-xs font-bold text-white">AI Cover Letter Generator</div>
+            <div class="text-[11px] text-slate-400">Create tailored cover letters with 1-click DOCX download</div>
+          </div>
+        </div>
+        <span class="text-[10px] font-mono text-slate-500">Action</span>
+      </button>
+      <button onclick="executeCommand('demo-swe')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/5 text-left text-slate-200 group transition">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-purple-400 text-lg">terminal</span>
+          <div>
+            <div class="text-xs font-bold text-white">Load Full-Stack Engineer Demo</div>
+            <div class="text-[11px] text-slate-400">Pre-fill sample resume and React/Python JD</div>
+          </div>
+        </div>
+        <span class="text-[10px] font-mono text-slate-500">Preset</span>
+      </button>
+      <button onclick="executeCommand('demo-data')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/5 text-left text-slate-200 group transition">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-sky-400 text-lg">dataset</span>
+          <div>
+            <div class="text-xs font-bold text-white">Load Data Scientist & AI Demo</div>
+            <div class="text-[11px] text-slate-400">Pre-fill ML / Data Science resume & JD</div>
+          </div>
+        </div>
+        <span class="text-[10px] font-mono text-slate-500">Preset</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Commercial Pro Pricing Modal -->
+<div id="modal-pricing" class="modal fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="pricing-title">
+  <div class="bg-slate-900 border border-white/10 rounded-2xl p-6 md:p-8 max-w-3xl w-full mx-4 shadow-2xl max-h-[90vh] overflow-y-auto">
+    <div class="flex justify-between items-center mb-4">
+      <div>
+        <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20 text-[10px] font-mono font-bold uppercase mb-1">Commercial Plans</div>
+        <h3 id="pricing-title" class="text-2xl font-extrabold text-white">Upgrade to ResumeGPT Pro</h3>
+      </div>
+      <button onclick="hideModal('modal-pricing')" class="text-slate-400 hover:text-white"><span class="material-symbols-outlined text-sm">close</span></button>
+    </div>
+    <p class="text-xs text-slate-400 mb-6">Land 3x more recruiter callbacks with unlimited ATS scans, real-time score diffing, and 1-click tailored resume generation.</p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+      <!-- Free Tier -->
+      <div class="rounded-xl p-5 border border-white/10 bg-slate-950/50 flex flex-col justify-between">
+        <div>
+          <h4 class="text-base font-bold text-white mb-1">Starter Edition</h4>
+          <p class="text-xs text-slate-400 mb-4">For active candidates exploring their initial resume score.</p>
+          <div class="text-2xl font-extrabold text-white font-mono mb-4">$0 <span class="text-xs text-slate-400 font-sans font-normal">/ forever free</span></div>
+          <ul class="space-y-2 text-xs text-slate-300">
+            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-400 text-sm">check</span>3 Free ATS Scans / month</li>
+            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-400 text-sm">check</span>Basic Keyword Matching</li>
+            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-400 text-sm">check</span>Standard Resume Builder</li>
+          </ul>
+        </div>
+        <button onclick="hideModal('modal-pricing')" class="btn btn-ghost w-full mt-6">Current Plan</button>
+      </div>
+
+      <!-- Pro Tier -->
+      <div class="rounded-xl p-5 border border-amber-500/30 bg-gradient-to-b from-amber-950/20 to-slate-950/80 flex flex-col justify-between relative shadow-lg shadow-amber-500/5">
+        <div class="absolute -top-2.5 right-4 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-amber-400 to-orange-400 text-slate-950 text-[10px] font-bold uppercase tracking-wider">Most Popular</div>
+        <div>
+          <h4 class="text-base font-bold text-amber-300 mb-1">Professional Pass</h4>
+          <p class="text-xs text-slate-400 mb-4">For ambitious professionals aiming for top-tier tech roles.</p>
+          <div class="text-2xl font-extrabold text-white font-mono mb-4">$9.99 <span class="text-xs text-slate-400 font-sans font-normal">/ month</span></div>
+          <ul class="space-y-2 text-xs text-slate-200">
+            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-400 text-sm">check</span><strong>Unlimited</strong> ATS Scans & Diffing</li>
+            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-400 text-sm">check</span><strong>1-Click JD Auto-Tailor</strong></li>
+            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-400 text-sm">check</span><strong>AI Cover Letter Studio</strong> + DOCX export</li>
+            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-400 text-sm">check</span><strong>Chrome Extension</strong> for LinkedIn / Indeed</li>
+            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-400 text-sm">check</span>ATS-Compliant PDF & DOCX Compilers</li>
+          </ul>
+        </div>
+        <button onclick="showToast('Upgrade portal initialized! (Demo mode)', 'success'); hideModal('modal-pricing');" class="btn btn-primary w-full mt-6 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 border-amber-400/30 text-white font-bold">Unlock Pro Access</button>
+      </div>
+    </div>
+
+    <div class="pt-4 border-t border-white/10 flex justify-end">
+      <button onclick="hideModal('modal-pricing')" class="btn btn-ghost">Close</button>
+    </div>
+  </div>
+</div>
 
 <script>
 const API_BASE = 'http://localhost:8000';
@@ -2198,6 +2357,67 @@ function checkUrlParams() {
   } catch (e) { /* ignore */ }
 }
 
+/* ------------------------------ Command Palette & Presets ------------------------------ */
+
+function openCommandPalette() {
+  showModal('modal-cmd-palette');
+  setTimeout(() => {
+    const inp = $('cmd-search-input');
+    if (inp) { inp.value = ''; inp.focus(); filterCommandPalette(); }
+  }, 50);
+}
+
+function filterCommandPalette() {
+  const q = ($('cmd-search-input').value || '').toLowerCase().trim();
+  const list = $('cmd-items-list');
+  if (!list) return;
+  const btns = list.querySelectorAll('button');
+  btns.forEach(b => {
+    const text = b.textContent.toLowerCase();
+    b.style.display = (!q || text.includes(q)) ? 'flex' : 'none';
+  });
+}
+
+function executeCommand(cmd) {
+  hideModal('modal-cmd-palette');
+  if (cmd === 'page-analyzer') showPage('analyzer');
+  else if (cmd === 'page-builder') showPage('builder');
+  else if (cmd === 'auto-tailor') showModal('modal-auto-tailor');
+  else if (cmd === 'cover-letter') openCoverLetterStudio();
+  else if (cmd === 'pricing') showModal('modal-pricing');
+  else if (cmd === 'demo-swe') loadRoleDemo('swe');
+  else if (cmd === 'demo-data') loadRoleDemo('data');
+  else if (cmd === 'demo-pm') loadRoleDemo('pm');
+}
+
+function loadRoleDemo(roleKey) {
+  if (roleKey === 'swe') {
+    if ($('target-role')) $('target-role').value = 'Senior Full-Stack Engineer';
+    if ($('job-desc-input')) $('job-desc-input').value = 'Requirements: Python, React, TypeScript, PostgreSQL, Docker, AWS, CI/CD Pipelines, Microservices architecture, Distributed systems, Unit testing, REST APIs.';
+    if ($('tailor-role')) $('tailor-role').value = 'Senior Full-Stack Engineer';
+    if ($('tailor-jd')) $('tailor-jd').value = 'Requirements: Python, React, TypeScript, PostgreSQL, Docker, AWS, CI/CD Pipelines, Microservices architecture.';
+    if ($('resume-input')) $('resume-input').value = sampleResume;
+    showPage('analyzer');
+    showToast('Loaded Full-Stack Engineer preset demo!', 'success');
+  } else if (roleKey === 'data') {
+    if ($('target-role')) $('target-role').value = 'Senior Data Scientist & ML Engineer';
+    if ($('job-desc-input')) $('job-desc-input').value = 'Requirements: Python, SQL, Machine Learning, Deep Learning, PyTorch, Scikit-Learn, Pandas, NumPy, Power BI, Tableau, ETL Pipelines, BigQuery.';
+    if ($('tailor-role')) $('tailor-role').value = 'Senior Data Scientist & ML Engineer';
+    if ($('tailor-jd')) $('tailor-jd').value = 'Requirements: Python, SQL, Machine Learning, Deep Learning, PyTorch, Scikit-Learn, Pandas, NumPy, Power BI, Tableau.';
+    if ($('resume-input')) $('resume-input').value = sampleResume;
+    showPage('analyzer');
+    showToast('Loaded Data Scientist preset demo!', 'success');
+  } else if (roleKey === 'pm') {
+    if ($('target-role')) $('target-role').value = 'Technical Product Manager';
+    if ($('job-desc-input')) $('job-desc-input').value = 'Requirements: Product Strategy, Agile, Scrum, User Stories, Roadmap Planning, Data Analysis, SQL, Stakeholder Management, Jira, KPI Tracking.';
+    if ($('tailor-role')) $('tailor-role').value = 'Technical Product Manager';
+    if ($('tailor-jd')) $('tailor-jd').value = 'Requirements: Product Strategy, Agile, Scrum, User Stories, Roadmap Planning, Data Analysis, SQL, Stakeholder Management.';
+    if ($('resume-input')) $('resume-input').value = sampleResume;
+    showPage('analyzer');
+    showToast('Loaded Technical Product Manager preset demo!', 'success');
+  }
+}
+
 /* ------------------------------ Init ------------------------------ */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -2207,7 +2427,13 @@ document.addEventListener('DOMContentLoaded', () => {
   checkServer();
   checkUrlParams();
 
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeTopModal(); hideNotifications(); } });
+  document.addEventListener('keydown', e => { 
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      openCommandPalette();
+    }
+    if (e.key === 'Escape') { closeTopModal(); hideNotifications(); } 
+  });
   document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) hideModal(m.id); }));
   document.addEventListener('click', e => {
     const panel = $('notif-panel');
