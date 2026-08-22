@@ -187,62 +187,187 @@ select:-webkit-autofill {
 
 .fade-in { animation: rgFadeUp .25s cubic-bezier(0.16, 1, 0.3, 1); }
 
-/* --- Light Mode System Support --- */
+/* --- High-Precision Light Mode Design System --- */
 html.light body {
     background-color: #f8fafc !important;
     background-image: 
-        radial-gradient(at 15% 15%, rgba(14, 165, 233, 0.06) 0px, transparent 45%),
+        radial-gradient(at 15% 15%, rgba(14, 165, 233, 0.05) 0px, transparent 45%),
         radial-gradient(at 85% 10%, rgba(20, 184, 166, 0.05) 0px, transparent 40%),
         radial-gradient(at 50% 90%, rgba(241, 245, 249, 0.8) 0px, transparent 60%) !important;
     color: #0f172a !important;
 }
-html.light .glass-card {
-    background: rgba(255, 255, 255, 0.9) !important;
-    border: 1px solid rgba(226, 232, 240, 0.9) !important;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
-}
-html.light aside, html.light .bg-slate-900, html.light .bg-slate-950 {
+
+html.light aside {
     background-color: #ffffff !important;
     border-color: #e2e8f0 !important;
 }
+
 html.light main {
     background-color: #f8fafc !important;
 }
-html.light .text-white {
-    color: #0f172a !important;
+
+/* Top Quick Command Bar & Headers */
+html.light .hidden.md\:flex,
+html.light div[class*="bg-slate-950/75"],
+html.light nav[class*="bg-slate-950"] {
+    background-color: #ffffff !important;
+    border-color: #e2e8f0 !important;
 }
-html.light .text-slate-200, html.light .text-slate-300 {
-    color: #1e293b !important;
+
+/* Cards & Panels */
+html.light .glass-card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 4px 12px 0 rgba(0, 0, 0, 0.03) !important;
 }
-html.light .text-slate-400 {
-    color: #64748b !important;
+
+html.light .glass-card:hover {
+    border-color: #0ea5e9 !important;
+    box-shadow: 0 4px 20px -2px rgba(14, 165, 233, 0.12) !important;
 }
+
+/* Textarea & Input Wrappers */
+html.light [class*="bg-slate-950"],
+html.light [class*="bg-slate-900"],
+html.light [class*="bg-slate-800"] {
+    background-color: #ffffff !important;
+    border-color: #e2e8f0 !important;
+}
+
+/* Specific Card Headers and Inner Panels */
+html.light .glass-card div[class*="bg-slate-900"],
+html.light .glass-card div[class*="bg-slate-950"] {
+    background-color: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+}
+
+/* Textareas, Inputs, and Fields */
+html.light textarea,
+html.light input[type="text"],
+html.light input[type="email"],
+html.light input[type="tel"],
+html.light input[type="number"],
+html.light select,
 html.light .field {
     background-color: #ffffff !important;
     color: #0f172a !important;
     border-color: #cbd5e1 !important;
 }
+
+html.light textarea::placeholder,
+html.light input::placeholder {
+    color: #94a3b8 !important;
+}
+
+html.light textarea:focus,
+html.light input:focus,
 html.light .field:focus {
     background-color: #ffffff !important;
     color: #0f172a !important;
     border-color: #0ea5e9 !important;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15) !important;
 }
-html.light input:-webkit-autofill,
-html.light textarea:-webkit-autofill,
-html.light select:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
-    -webkit-text-fill-color: #0f172a !important;
-    caret-color: #0f172a !important;
-    border-color: #cbd5e1 !important;
+
+/* Typography Overrides */
+html.light .text-white {
+    color: #0f172a !important;
 }
-html.light .btn-ghost {
-    background: #f1f5f9 !important;
+
+html.light .text-slate-100,
+html.light .text-slate-200,
+html.light .text-slate-300 {
+    color: #1e293b !important;
+}
+
+html.light .text-slate-400 {
+    color: #475569 !important;
+}
+
+html.light .text-slate-500 {
+    color: #64748b !important;
+}
+
+/* Buttons */
+html.light .btn-ghost,
+html.light button[class*="bg-slate-900"],
+html.light button[class*="bg-white/5"] {
+    background-color: #f1f5f9 !important;
     color: #334155 !important;
     border-color: #e2e8f0 !important;
 }
-html.light .btn-ghost:hover:not(:disabled) {
-    background: #e2e8f0 !important;
+
+html.light .btn-ghost:hover:not(:disabled),
+html.light button[class*="bg-slate-900"]:hover,
+html.light button[class*="bg-white/5"]:hover {
+    background-color: #e2e8f0 !important;
     color: #0f172a !important;
+}
+
+/* Top bar quick search button */
+html.light button[onclick="openCommandPalette()"] {
+    background-color: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #475569 !important;
+}
+
+html.light button[onclick="openCommandPalette()"] kbd {
+    background-color: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    color: #334155 !important;
+}
+
+/* Borders */
+html.light [class*="border-white"] {
+    border-color: #e2e8f0 !important;
+}
+
+/* Empty State Pills */
+html.light [class*="bg-slate-800/80"],
+html.light span:empty {
+    background-color: #f1f5f9 !important;
+    color: #64748b !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* Modals */
+html.light .modal > div {
+    background-color: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Toasts */
+html.light .toast {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.12) !important;
+}
+
+html.light .toast p, html.light .toast span {
+    color: #0f172a !important;
+}
+
+/* Diff card in light mode */
+html.light #ats-diff-card {
+    background: linear-gradient(135deg, #f0f9ff 0%, #f8fafc 50%, #ecfdf5 100%) !important;
+    border-color: #bae6fd !important;
+}
+
+html.light #ats-diff-card [class*="bg-slate-950"] {
+    background-color: #ffffff !important;
+    border-color: #e2e8f0 !important;
+}
+
+/* Dropzone */
+html.light #file-dropzone {
+    background-color: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+}
+
+html.light #file-dropzone:hover {
+    background-color: #f0f9ff !important;
+    border-color: #0ea5e9 !important;
 }
 </style>
 </head>
@@ -488,41 +613,41 @@ html.light .btn-ghost:hover:not(:disabled) {
 <!-- Resume & Job Input -->
 <div class="col-span-1 lg:col-span-6 flex flex-col gap-4">
 <div class="glass-card rounded-xl flex flex-col h-[320px] overflow-hidden">
-<div class="p-3.5 border-b border-white/10 flex justify-between items-center bg-slate-900/60">
+<div class="p-3.5 border-b border-slate-200/60 dark:border-white/10 flex justify-between items-center bg-slate-100/70 dark:bg-slate-900/60">
 <div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-sky-400 text-base">description</span>
-<span class="text-xs font-bold uppercase tracking-wider text-slate-200">1. Resume Text</span>
+<span class="material-symbols-outlined text-sky-500 dark:text-sky-400 text-base">description</span>
+<span class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-200">1. Resume Text</span>
 </div>
 <div class="flex items-center gap-3">
-<button onclick="loadSampleResume()" class="text-xs text-sky-400 hover:text-sky-300 font-medium transition">Load Sample</button>
-<button onclick="clearResume()" class="text-xs text-slate-400 hover:text-slate-200 transition">Clear</button>
+<button onclick="loadSampleResume()" class="text-xs text-sky-600 dark:text-sky-400 hover:underline font-medium transition">Load Sample</button>
+<button onclick="clearResume()" class="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition">Clear</button>
 </div>
 </div>
-<div class="flex-1 p-3 bg-slate-950/60">
-<textarea id="resume-input" class="w-full h-full p-2 text-xs md:text-sm font-sans text-slate-200 resize-none bg-transparent border-0 focus:outline-none placeholder:text-slate-600 leading-relaxed" placeholder="Paste your resume text here..."></textarea>
+<div class="flex-1 p-3 bg-white dark:bg-slate-950/60">
+<textarea id="resume-input" class="w-full h-full p-2 text-xs md:text-sm font-sans text-slate-800 dark:text-slate-200 resize-none bg-transparent border-0 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-600 leading-relaxed" placeholder="Paste your resume text here..."></textarea>
 </div>
 </div>
 
-<div id="file-dropzone" role="button" tabindex="0" aria-label="Upload resume file" class="glass-card rounded-xl border-2 border-dashed border-white/15 p-4 text-center cursor-pointer hover:border-sky-500/50 hover:bg-sky-500/5 transition group">
+<div id="file-dropzone" role="button" tabindex="0" aria-label="Upload resume file" class="glass-card rounded-xl border-2 border-dashed border-slate-300 dark:border-white/15 p-4 text-center cursor-pointer hover:border-sky-500/50 hover:bg-sky-500/5 transition group bg-slate-50 dark:bg-transparent">
 <div class="flex items-center justify-center gap-2.5 mb-1">
 <span id="dz-spinner" class="spinner hidden"></span>
-<span class="material-symbols-outlined text-sky-400 group-hover:scale-110 transition">upload_file</span>
-<p class="text-xs md:text-sm text-slate-300" id="dz-label">Drag &amp; drop resume or <span class="text-sky-400 font-semibold underline underline-offset-2">browse file</span></p>
+<span class="material-symbols-outlined text-sky-500 dark:text-sky-400 group-hover:scale-110 transition">upload_file</span>
+<p class="text-xs md:text-sm text-slate-700 dark:text-slate-300" id="dz-label">Drag &amp; drop resume or <span class="text-sky-600 dark:text-sky-400 font-semibold underline underline-offset-2">browse file</span></p>
 </div>
 <p class="text-[11px] text-slate-500 font-mono">Accepts PDF &amp; DOCX up to 5MB</p>
 <input type="file" id="resume-file" accept=".pdf,.docx" class="hidden">
 </div>
 
 <div class="glass-card rounded-xl flex flex-col h-[230px] overflow-hidden">
-<div class="p-3 border-b border-white/10 flex justify-between items-center bg-slate-900/60">
+<div class="p-3 border-b border-slate-200/60 dark:border-white/10 flex justify-between items-center bg-slate-100/70 dark:bg-slate-900/60">
 <div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-teal-400 text-base">work</span>
-<span class="text-xs font-bold uppercase tracking-wider text-slate-200">2. Target Job Description</span>
+<span class="material-symbols-outlined text-teal-500 dark:text-teal-400 text-base">work</span>
+<span class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-200">2. Target Job Description</span>
 </div>
-<button onclick="$('job-desc-input').value=''" class="text-xs text-slate-400 hover:text-slate-200 transition">Clear</button>
+<button onclick="$('job-desc-input').value=''" class="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition">Clear</button>
 </div>
-<div class="flex-1 p-3 bg-slate-950/60">
-<textarea id="job-desc-input" class="w-full h-full p-2 text-xs md:text-sm font-sans text-slate-200 resize-none bg-transparent border-0 focus:outline-none placeholder:text-slate-600 leading-relaxed" placeholder="Paste job description here for keyword matching and semantic scoring..."></textarea>
+<div class="flex-1 p-3 bg-white dark:bg-slate-950/60">
+<textarea id="job-desc-input" class="w-full h-full p-2 text-xs md:text-sm font-sans text-slate-800 dark:text-slate-200 resize-none bg-transparent border-0 focus:outline-none placeholder:text-slate-400 dark:placeholder:text-slate-600 leading-relaxed" placeholder="Paste job description here for keyword matching and semantic scoring..."></textarea>
 </div>
 </div>
 </div>
@@ -1381,11 +1506,11 @@ function val(id) { const el = $(id); return el ? el.value : ''; }
 
 function showToast(msg, type = 'info') {
   const icons = { success: 'check_circle', error: 'error', warn: 'warning', info: 'info' };
-  const colors = { success: 'bg-green-600', error: 'bg-red-600', warn: 'bg-amber-500', info: 'bg-slate-800' };
+  const colors = { success: 'bg-green-600', error: 'bg-red-600', warn: 'bg-amber-500', info: 'bg-sky-600' };
   const container = $('toast-container');
   if (!container) return;
   const el = document.createElement('div');
-  el.className = 'toast pointer-events-auto ' + (colors[type] || colors.info) + ' text-white text-xs md:text-sm font-medium rounded-xl shadow-xl px-4 py-3 flex items-start gap-3 cursor-pointer border border-white/10';
+  el.className = 'toast pointer-events-auto ' + (colors[type] || colors.info) + ' text-white text-xs md:text-sm font-semibold rounded-xl shadow-xl px-4 py-3 flex items-start gap-3 cursor-pointer border border-white/10';
   el.setAttribute('role', 'status');
   el.innerHTML = '<span class="material-symbols-outlined shrink-0" style="font-size:18px">' + (icons[type] || 'info') + '</span><span class="leading-snug">' + escapeHtml(msg) + '</span>';
   container.appendChild(el);
