@@ -100,6 +100,20 @@ class TokenData(BaseModel):
     username: Optional[str] = None
 
 
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
+
+
+class ChangePasswordRequest(BaseModel):
+    old_password: str
+    new_password: str
+
+
 # Industry Template schemas
 class IndustryTemplate(BaseModel):
     id: str

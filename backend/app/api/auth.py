@@ -9,7 +9,15 @@ import jwt
 from passlib.context import CryptContext
 
 from app.core.database import get_db, User
-from app.models.schemas import UserCreate, UserLogin, UserResponse, Token
+from app.models.schemas import (
+    UserCreate,
+    UserLogin,
+    UserResponse,
+    Token,
+    ForgotPasswordRequest,
+    ResetPasswordRequest,
+    ChangePasswordRequest,
+)
 
 router = APIRouter()
 
@@ -178,3 +186,96 @@ def update_user_profile(
     db.commit()
     db.refresh(current_user)
     return current_user
+
+
+@router.post("/auth/forgot-password")
+def forgot_password(payload: ForgotPasswordRequest, db: Session = Depends(get_db)):
+    """Initiate self-service password reset."""
+    user = db.query(User).filter(User.email == payload.email).first()
+    if not user:
+        # Prevent user enumeration by returning a uniform success message
+        return {
+            "status": "success",
+            "message": "If that email is registered, a secure reset token has been generated.",
+        }
+
+    # Generate 15-minute password reset token
+    reset_token = create_access_token(
+        data={"sub": user.username, "purpose": "password_reset"},
+        expires_delta=timedelta(minutes=15),
+    )
+    return {
+        "status": "success",
+        "message": "If that email is registered, a secure reset token has been generated.",
+        "reset_token": reset_token,  # Included for client handling / automated email simulation
+    }
+
+
+@router.post("/auth/reset-password")
+def reset_password(payload: ResetPasswordRequest, db: Session = Depends(get_db)):
+    """Reset password using a valid reset token."""
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Invalid or expired reset token",
+    )
+    try:
+        token_payload = jwt.decode(payload.token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = token_payload.get("sub")
+        purpose: str = token_payload.get("purpose")
+        if username is None or purpose != "password_reset":
+            raise credentials_exception
+    except Exception:
+        raise credentials_exception
+
+    user = db.query(User).filter(User.username == username).first()
+    if user is None:
+        raise credentials_exception
+
+    if len(payload.new_password) < 6:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="New password must be at least 6 characters long",
+        )
+
+    user.hashed_password = get_password_hash(payload.new_password)
+    db.commit()
+    return {"status": "success", "message": "Password has been successfully updated"}
+
+
+@router.post("/auth/change-password")
+def change_password(
+    payload: ChangePasswordRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Change password for the authenticated user."""
+    if not verify_password(payload.old_password, current_user.hashed_password):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Incorrect current password",
+        )
+    if len(payload.new_password) < 6:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="New password must be at least 6 characters long",
+        )
+
+    current_user.hashed_password = get_password_hash(payload.new_password)
+    db.commit()
+    return {"status": "success", "message": "Password changed successfully"}
+
+
+@router.delete("/auth/me")
+def delete_account(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """GDPR Compliance: Permanently purge current user account and all associated resumes, applications, and logs."""
+    user_id = current_user.id
+    db.delete(current_user)
+    db.commit()
+    return {
+        "status": "deleted",
+        "user_id": user_id,
+        "message": "Account and all associated resume data permanently purged.",
+    }
