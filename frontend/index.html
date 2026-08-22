@@ -186,6 +186,64 @@ select:-webkit-autofill {
 }
 
 .fade-in { animation: rgFadeUp .25s cubic-bezier(0.16, 1, 0.3, 1); }
+
+/* --- Light Mode System Support --- */
+html.light body {
+    background-color: #f8fafc !important;
+    background-image: 
+        radial-gradient(at 15% 15%, rgba(14, 165, 233, 0.06) 0px, transparent 45%),
+        radial-gradient(at 85% 10%, rgba(20, 184, 166, 0.05) 0px, transparent 40%),
+        radial-gradient(at 50% 90%, rgba(241, 245, 249, 0.8) 0px, transparent 60%) !important;
+    color: #0f172a !important;
+}
+html.light .glass-card {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(226, 232, 240, 0.9) !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+html.light aside, html.light .bg-slate-900, html.light .bg-slate-950 {
+    background-color: #ffffff !important;
+    border-color: #e2e8f0 !important;
+}
+html.light main {
+    background-color: #f8fafc !important;
+}
+html.light .text-white {
+    color: #0f172a !important;
+}
+html.light .text-slate-200, html.light .text-slate-300 {
+    color: #1e293b !important;
+}
+html.light .text-slate-400 {
+    color: #64748b !important;
+}
+html.light .field {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+html.light .field:focus {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    border-color: #0ea5e9 !important;
+}
+html.light input:-webkit-autofill,
+html.light textarea:-webkit-autofill,
+html.light select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+    -webkit-text-fill-color: #0f172a !important;
+    caret-color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+html.light .btn-ghost {
+    background: #f1f5f9 !important;
+    color: #334155 !important;
+    border-color: #e2e8f0 !important;
+}
+html.light .btn-ghost:hover:not(:disabled) {
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
+}
 </style>
 </head>
 <body class="bg-slate-950 text-slate-100 antialiased overflow-hidden min-h-screen">
@@ -275,12 +333,18 @@ select:-webkit-autofill {
     <div class="h-4 w-px bg-white/10"></div>
     <div class="flex items-center gap-1.5 text-xs text-slate-400">
       <span class="text-[11px] uppercase font-mono tracking-wider font-semibold text-slate-500">1-Click Demos:</span>
-      <button onclick="loadRoleDemo('swe')" class="px-2 py-1 rounded-lg bg-white/5 hover:bg-sky-500/20 hover:text-sky-300 text-slate-300 text-[11px] font-medium transition border border-white/5 hover:border-sky-500/30">💻 Full-Stack</button>
-      <button onclick="loadRoleDemo('data')" class="px-2 py-1 rounded-lg bg-white/5 hover:bg-teal-500/20 hover:text-teal-300 text-slate-300 text-[11px] font-medium transition border border-white/5 hover:border-teal-500/30">📊 Data/AI</button>
-      <button onclick="loadRoleDemo('pm')" class="px-2 py-1 rounded-lg bg-white/5 hover:bg-amber-500/20 hover:text-amber-300 text-slate-300 text-[11px] font-medium transition border border-white/5 hover:border-amber-500/30">🎯 Product</button>
+      <button onclick="loadRoleDemo('swe')" class="px-2 py-1 rounded-lg bg-white/5 hover:bg-sky-500/20 hover:text-sky-300 text-slate-300 text-[11px] font-medium transition border border-white/5 hover:border-sky-500/30">💻 Tech</button>
+      <button onclick="loadRoleDemo('marketing')" class="px-2 py-1 rounded-lg bg-white/5 hover:bg-pink-500/20 hover:text-pink-300 text-slate-300 text-[11px] font-medium transition border border-white/5 hover:border-pink-500/30">📈 Marketing</button>
+      <button onclick="loadRoleDemo('sales')" class="px-2 py-1 rounded-lg bg-white/5 hover:bg-emerald-500/20 hover:text-emerald-300 text-slate-300 text-[11px] font-medium transition border border-white/5 hover:border-emerald-500/30">💼 Sales</button>
+      <button onclick="loadRoleDemo('finance')" class="px-2 py-1 rounded-lg bg-white/5 hover:bg-teal-500/20 hover:text-teal-300 text-slate-300 text-[11px] font-medium transition border border-white/5 hover:border-teal-500/30">💰 Finance</button>
+      <button onclick="loadRoleDemo('hr')" class="px-2 py-1 rounded-lg bg-white/5 hover:bg-purple-500/20 hover:text-purple-300 text-slate-300 text-[11px] font-medium transition border border-white/5 hover:border-purple-500/30">👥 HR</button>
     </div>
   </div>
-  <div class="flex items-center gap-3">
+  <div class="flex items-center gap-2.5">
+    <button id="theme-toggle-btn" onclick="toggleTheme()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-white/10 text-slate-300 hover:text-white text-xs font-medium transition cursor-pointer" title="Toggle Light / Dark Mode">
+      <span id="theme-icon" class="material-symbols-outlined text-sm text-amber-400">light_mode</span>
+      <span id="theme-text" class="text-[11px] font-mono">Light Mode</span>
+    </button>
     <button onclick="showModal('modal-pricing')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/15 to-orange-500/15 hover:from-amber-500/25 hover:to-orange-500/25 border border-amber-500/30 text-amber-300 text-xs font-semibold shadow-sm transition">
       <span class="material-symbols-outlined text-sm text-amber-400">diamond</span>
       <span>Pro Pass</span>
@@ -1136,6 +1200,46 @@ select:-webkit-autofill {
         </div>
         <span class="text-[10px] font-mono text-slate-500">Preset</span>
       </button>
+      <button onclick="executeCommand('demo-marketing')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/5 text-left text-slate-200 group transition">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-pink-400 text-lg">campaign</span>
+          <div>
+            <div class="text-xs font-bold text-white">Load Growth Marketing Demo</div>
+            <div class="text-[11px] text-slate-400">Pre-fill SEO, Content Strategy, Google Analytics JD</div>
+          </div>
+        </div>
+        <span class="text-[10px] font-mono text-slate-500">Preset</span>
+      </button>
+      <button onclick="executeCommand('demo-sales')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/5 text-left text-slate-200 group transition">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-emerald-400 text-lg">payments</span>
+          <div>
+            <div class="text-xs font-bold text-white">Load Enterprise Sales Demo</div>
+            <div class="text-[11px] text-slate-400">Pre-fill B2B Sales, Salesforce, Pipeline JD</div>
+          </div>
+        </div>
+        <span class="text-[10px] font-mono text-slate-500">Preset</span>
+      </button>
+      <button onclick="executeCommand('demo-finance')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/5 text-left text-slate-200 group transition">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-teal-400 text-lg">account_balance</span>
+          <div>
+            <div class="text-xs font-bold text-white">Load Financial Analyst Demo</div>
+            <div class="text-[11px] text-slate-400">Pre-fill Financial Modeling, Budgeting, GAAP JD</div>
+          </div>
+        </div>
+        <span class="text-[10px] font-mono text-slate-500">Preset</span>
+      </button>
+      <button onclick="executeCommand('demo-hr')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/5 text-left text-slate-200 group transition">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-purple-400 text-lg">badge</span>
+          <div>
+            <div class="text-xs font-bold text-white">Load HR & Talent Partner Demo</div>
+            <div class="text-[11px] text-slate-400">Pre-fill Talent Acquisition, HRIS, Onboarding JD</div>
+          </div>
+        </div>
+        <span class="text-[10px] font-mono text-slate-500">Preset</span>
+      </button>
       <button onclick="executeCommand('demo-data')" class="w-full flex items-center justify-between p-3 rounded-xl hover:bg-white/5 text-left text-slate-200 group transition">
         <div class="flex items-center gap-3">
           <span class="material-symbols-outlined text-sky-400 text-lg">dataset</span>
@@ -1757,14 +1861,55 @@ function updateAnalysisUI(data) {
   updateDiffCard(score, sub, matched, data.missing_skills || []);
 }
 
-const TECHNICAL_TAXONOMY = [
-  'Python', 'SQL', 'JavaScript', 'TypeScript', 'React', 'Node.js', 'Next.js', 'Vue.js', 'Angular',
-  'PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'GraphQL', 'REST APIs',
-  'AWS', 'Azure', 'GCP', 'Docker', 'Kubernetes', 'CI/CD Pipelines', 'Git', 'Linux',
+const UNIVERSAL_ROLE_TAXONOMY = [
+  // 1. Engineering & Tech
+  'Python', 'Java', 'C++', 'JavaScript', 'TypeScript', 'React', 'Node.js', 'Next.js', 'Vue.js', 'Angular',
+  'PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'GraphQL', 'REST APIs', 'FastAPI', 'Django',
+  'AWS', 'Azure', 'GCP', 'Docker', 'Kubernetes', 'CI/CD Pipelines', 'Git', 'Linux', 'Terraform',
+  'System Architecture', 'Microservices', 'Distributed Systems', 'Agile', 'Scrum', 'Unit Testing', 'Cybersecurity',
+
+  // 2. Data Science, AI & Analytics
   'Machine Learning', 'Deep Learning', 'Data Science', 'Data Analysis', 'Data Engineering',
   'Pandas', 'NumPy', 'Scikit-Learn', 'TensorFlow', 'PyTorch', 'Tableau', 'Power BI', 'Excel',
-  'System Architecture', 'Microservices', 'Distributed Systems', 'Agile', 'Scrum', 'Unit Testing',
-  'Cybersecurity', 'ETL Pipelines', 'Data Modeling', 'Business Intelligence', 'FastAPI', 'Django'
+  'ETL Pipelines', 'Data Modeling', 'Business Intelligence', 'BigQuery', 'Snowflake', 'Statistics',
+
+  // 3. Marketing, Growth & Content
+  'SEO', 'Content Strategy', 'Brand Management', 'Google Analytics', 'Social Media Marketing',
+  'Lead Generation', 'Copywriting', 'Email Marketing', 'Market Research', 'Digital Advertising',
+  'A/B Testing', 'Campaign Management', 'Growth Marketing', 'Public Relations', 'Influencer Marketing',
+
+  // 4. Sales, Business Development & Account Management
+  'Account Management', 'B2B Sales', 'Lead Qualification', 'Salesforce', 'CRM', 'Cold Outreach',
+  'Pipeline Management', 'Client Relations', 'Negotiation', 'Revenue Growth', 'Contract Closing',
+  'Strategic Partnerships', 'Direct Sales', 'Quota Attainment', 'Key Account Strategy',
+
+  // 5. Finance, Banking & Accounting
+  'Financial Modeling', 'Budgeting', 'Financial Forecasting', 'GAAP', 'QuickBooks', 'Accounts Payable',
+  'Accounts Receivable', 'Auditing', 'Risk Management', 'P&L Management', 'Tax Compliance',
+  'Cash Flow Analysis', 'Variance Analysis', 'Cost Accounting', 'Financial Reporting',
+
+  // 6. Human Resources, Talent & Recruiting
+  'Talent Acquisition', 'Employee Onboarding', 'HRIS', 'Performance Management', 'Labor Law',
+  'Payroll Administration', 'Employee Relations', 'Diversity & Inclusion', 'Workforce Planning',
+  'Compensation & Benefits', 'Talent Sourcing', 'Interviewing', 'HR Compliance',
+
+  // 7. Operations, Logistics & Supply Chain
+  'Supply Chain', 'Logistics', 'Vendor Management', 'Process Optimization', 'Lean Six Sigma',
+  'Resource Allocation', 'Quality Control', 'Project Management', 'Cross-functional Leadership',
+  'Risk Mitigation', 'Inventory Management', 'Procurement', 'Operations Management',
+
+  // 8. Healthcare, Nursing & Clinical
+  'Patient Care', 'Clinical Documentation', 'Electronic Health Records', 'EHR', 'HIPAA Compliance',
+  'Triage', 'Vital Signs', 'Medical Terminology', 'Patient Education', 'Clinical Workflow',
+  'Medication Administration', 'Treatment Planning',
+
+  // 9. Customer Success & Support
+  'Customer Retention', 'Zendesk', 'Customer Onboarding', 'Escalation Resolution', 'NPS',
+  'CSAT', 'Technical Support', 'Client Advocacy', 'Churn Reduction', 'Customer Service',
+
+  // 10. Design & Product Management
+  'UI/UX Design', 'Figma', 'Wireframing', 'User Research', 'Prototyping', 'Product Strategy',
+  'Roadmap Planning', 'Jira', 'User Stories', 'Design Systems', 'Product Lifecycle'
 ];
 
 function extractKeywords(text) {
@@ -1772,7 +1917,7 @@ function extractKeywords(text) {
   const textLower = ' ' + text.toLowerCase() + ' ';
   const matched = [];
   
-  TECHNICAL_TAXONOMY.forEach(term => {
+  UNIVERSAL_ROLE_TAXONOMY.forEach(term => {
     const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex = new RegExp('(^|[^a-zA-Z0-9])' + escaped + '([^a-zA-Z0-9]|$)', 'i');
     if (regex.test(textLower)) {
@@ -1865,7 +2010,7 @@ function openAutoTailorModal() {
 }
 
 function executeAutoTailor() {
-  const role = val('tailor-role').trim() || 'Data Scientist';
+  const role = val('tailor-role').trim() || 'Professional';
   const jd = val('tailor-jd').trim();
   const btn = $('tailor-btn');
   if (!jd) { markFieldError('tailor-jd'); showToast('Please paste a job description to tailor against', 'warn'); return; }
@@ -1874,7 +2019,28 @@ function executeAutoTailor() {
 
   setTimeout(() => {
     const topSkills = extractKeywords(jd + ' ' + role);
-    const primarySkills = topSkills.length ? topSkills : ['Python', 'SQL', 'Data Science', 'Machine Learning', 'Power BI', 'Excel', 'Pandas', 'NumPy'];
+    const roleLower = (role + ' ' + jd).toLowerCase();
+
+    // Determine domain category for authentic non-tech & tech bullet points
+    let domain = 'tech';
+    if (roleLower.includes('market') || roleLower.includes('seo') || roleLower.includes('content') || roleLower.includes('brand')) domain = 'marketing';
+    else if (roleLower.includes('sale') || roleLower.includes('account') || roleLower.includes('b2b') || roleLower.includes('revenue')) domain = 'sales';
+    else if (roleLower.includes('financ') || roleLower.includes('accountant') || roleLower.includes('budget') || roleLower.includes('audit')) domain = 'finance';
+    else if (roleLower.includes('hr') || roleLower.includes('human resource') || roleLower.includes('recruit') || roleLower.includes('talent')) domain = 'hr';
+    else if (roleLower.includes('operat') || roleLower.includes('supply chain') || roleLower.includes('logistics')) domain = 'operations';
+    else if (roleLower.includes('nurse') || roleLower.includes('health') || roleLower.includes('patient') || roleLower.includes('clinic')) domain = 'healthcare';
+    else if (roleLower.includes('data') || roleLower.includes('analyst') || roleLower.includes('machine learning')) domain = 'data';
+
+    let defaultSkills = ['Python', 'SQL', 'React', 'Docker', 'AWS'];
+    if (domain === 'marketing') defaultSkills = ['SEO', 'Content Strategy', 'Google Analytics', 'Lead Generation', 'Campaign Management', 'Email Marketing'];
+    else if (domain === 'sales') defaultSkills = ['B2B Sales', 'Salesforce', 'Pipeline Management', 'Negotiation', 'Revenue Growth', 'Client Relations'];
+    else if (domain === 'finance') defaultSkills = ['Financial Modeling', 'Budgeting', 'QuickBooks', 'GAAP', 'P&L Management', 'Financial Forecasting'];
+    else if (domain === 'hr') defaultSkills = ['Talent Acquisition', 'HRIS', 'Employee Onboarding', 'Performance Management', 'Labor Law', 'Employee Relations'];
+    else if (domain === 'operations') defaultSkills = ['Supply Chain', 'Vendor Management', 'Process Optimization', 'Lean Six Sigma', 'Project Management', 'Logistics'];
+    else if (domain === 'healthcare') defaultSkills = ['Patient Care', 'Clinical Documentation', 'EHR', 'HIPAA Compliance', 'Triage', 'Vital Signs'];
+    else if (domain === 'data') defaultSkills = ['Python', 'SQL', 'Data Science', 'Machine Learning', 'Power BI', 'Excel', 'Pandas', 'NumPy'];
+
+    const primarySkills = topSkills.length ? topSkills : defaultSkills;
     
     // Auto-populate contact fields if empty
     if ($('builder-name') && (!$('builder-name').value.trim() || $('builder-name').value === 'Your Name')) {
@@ -1896,7 +2062,7 @@ function executeAutoTailor() {
     // Auto-update summary
     const summaryEl = $('builder-summary');
     if (summaryEl) {
-      summaryEl.value = 'Results-driven ' + role + ' with extensive hands-on expertise in ' + (primarySkills.slice(0, 4).join(', ')) + '. Proven track record of architecting scalable pipelines, optimizing complex data models, and delivering actionable business intelligence that improves operational performance and decision-making.';
+      summaryEl.value = 'Results-driven ' + role + ' with extensive hands-on expertise in ' + (primarySkills.slice(0, 4).join(', ')) + '. Proven track record of executing strategic initiatives, driving measurable business growth, optimizing cross-functional workflows, and delivering high-impact outcomes aligned with organizational objectives.';
     }
 
     // Auto-merge skills
@@ -1907,34 +2073,71 @@ function executeAutoTailor() {
       skillsEl.value = combined.join(', ');
     }
 
-    // Auto-generate comprehensive multi-role tailored experience bullets
+    // Auto-generate domain-authentic quantified multi-role experience bullets
     const expEl = $('builder-experience');
     if (expEl) {
-      const skill1 = primarySkills[0] || 'Python';
-      const skill2 = primarySkills[1] || 'SQL';
-      const skill3 = primarySkills[2] || 'Machine Learning';
-      const skill4 = primarySkills[3] || 'Power BI';
-      const skill5 = primarySkills[4] || 'Pandas';
+      const s1 = primarySkills[0] || 'Strategic Planning';
+      const s2 = primarySkills[1] || 'Cross-functional Collaboration';
+      const s3 = primarySkills[2] || 'Process Improvement';
+      const s4 = primarySkills[3] || 'KPI Analysis';
 
-      expEl.value = 'Apex Solutions | Senior ' + role + ' | 2022 - Present\n' +
-        '- Engineered end-to-end data pipelines leveraging ' + skill1 + ' and ' + skill2 + ', reducing query latency by 42% and automating daily reporting workflows.\n' +
-        '- Deployed scalable ' + skill3 + ' predictive models into production, boosting forecast accuracy by 28% across key enterprise datasets.\n' +
-        '- Built interactive executive dashboards in ' + skill4 + ', providing real-time visibility into mission-critical business KPIs.\n\n' +
-        'Tech Innovation Corp | ' + role + ' | 2020 - 2022\n' +
-        '- Developed high-throughput data processing scripts with ' + skill5 + ', eliminating reporting discrepancies by 99%.\n' +
-        '- Collaborated across engineering and product teams to integrate automated validation checks and streamline data ingestion pipelines.';
+      if (domain === 'marketing') {
+        expEl.value = 'Nexus Growth Media | Senior ' + role + ' | 2022 - Present\n' +
+          '- Spearheaded multi-channel campaigns leveraging ' + s1 + ' and ' + s2 + ', driving a 45% increase in inbound qualified leads and boosting conversion rate by 28%.\n' +
+          '- Optimized digital acquisition channels with ' + s3 + ', reducing customer acquisition cost (CAC) by 32% while scaling reach.\n' +
+          '- Monitored and refined full-funnel performance using ' + s4 + ', generating $1.4M in pipeline revenue across target verticals.\n\n' +
+          'Elevate Digital | ' + role + ' | 2020 - 2022\n' +
+          '- Managed end-to-end promotional initiatives, growing organic audience engagement by 72% year-over-year.\n' +
+          '- Partnered with product and sales leadership to launch 6 high-visibility campaigns on schedule.';
+      } else if (domain === 'sales') {
+        expEl.value = 'Apex Enterprise Solutions | Senior ' + role + ' | 2022 - Present\n' +
+          '- Managed full-cycle business development and key accounts utilizing ' + s1 + ' and ' + s2 + ', exceeding annual sales quota by 138% ($2.1M ARR).\n' +
+          '- Structured and negotiated enterprise contracts with ' + s3 + ', shortening the average sales cycle from 90 to 52 days.\n' +
+          '- Partnered with executive stakeholders to execute ' + s4 + ', maintaining a 94% client retention and expansion rate.\n\n' +
+          'Global Direct Commerce | ' + role + ' | 2020 - 2022\n' +
+          '- Built outbound prospecting pipelines, securing 35+ new corporate client logos in the first 12 months.\n' +
+          '- Consistently ranked in top 5% of regional business development representatives.';
+      } else if (domain === 'finance') {
+        expEl.value = 'Meridian Financial Partners | Senior ' + role + ' | 2022 - Present\n' +
+          '- Directed corporate budgeting and forecasting utilizing ' + s1 + ' and ' + s2 + ', identifying $450K in operational cost efficiencies.\n' +
+          '- Built dynamic multi-scenario financial models with ' + s3 + ', providing senior leadership with accurate quarterly P&L guidance.\n' +
+          '- Conducted monthly variance and cash flow audits using ' + s4 + ', ensuring 100% compliance with regulatory and GAAP standards.\n\n' +
+          'Summit Capital Advisors | ' + role + ' | 2020 - 2022\n' +
+          '- Reconciled high-volume account statements and streamlined monthly financial close cycle by 4 business days.\n' +
+          '- Prepared executive board presentations and ad-hoc financial risk assessments.';
+      } else if (domain === 'hr') {
+        expEl.value = 'Vanguard Talent Group | Senior ' + role + ' | 2022 - Present\n' +
+          '- Led full-lifecycle talent acquisition and employee onboarding with ' + s1 + ' and ' + s2 + ', scaling organization headcount by 45%.\n' +
+          '- Implemented modern performance management frameworks using ' + s3 + ', boosting employee retention to 91%.\n' +
+          '- Streamlined HR compliance and internal policies with ' + s4 + ', decreasing average time-to-hire from 45 to 21 days.\n\n' +
+          'Horizon People Operations | ' + role + ' | 2020 - 2022\n' +
+          '- Managed employee relations cases and coordinated structured training workshops for 200+ employees.\n' +
+          '- Automated candidate screening pipelines, improving candidate satisfaction score to 96%.';
+      } else {
+        // Tech / Data / General Engineering
+        expEl.value = 'Apex Solutions | Senior ' + role + ' | 2022 - Present\n' +
+          '- Engineered high-performance workflows leveraging ' + s1 + ' and ' + s2 + ', reducing operational turnaround time by 42%.\n' +
+          '- Deployed scalable ' + s3 + ' solutions into production, boosting system reliability and data accuracy by 35%.\n' +
+          '- Built interactive executive dashboards and tracking tools with ' + s4 + ', providing real-time visibility into mission-critical business KPIs.\n\n' +
+          'Tech Innovation Corp | ' + role + ' | 2020 - 2022\n' +
+          '- Developed automated data processing workflows, eliminating manual reporting errors by 99%.\n' +
+          '- Collaborated across cross-functional teams to integrate automated validation checks and streamline daily operations.';
+      }
     }
 
     // Auto-populate education if empty
     const eduEl = $('builder-education');
     if (eduEl && !eduEl.value.trim()) {
-      eduEl.value = 'B.S. in Computer Science & Data Analytics\nState University\n2016 - 2020';
+      eduEl.value = domain === 'finance' ? 'B.S. in Finance & Accounting\nState University\n2016 - 2020' :
+                    domain === 'marketing' ? 'B.A. in Marketing & Communications\nState University\n2016 - 2020' :
+                    domain === 'hr' ? 'B.A. in Human Resources Management\nState University\n2016 - 2020' :
+                    'B.S. in Business Administration & Technology\nState University\n2016 - 2020';
     }
 
     previewResume();
     hideModal('modal-auto-tailor');
     setLoading(btn, false);
-    showToast('Resume 1-Click Tailored to "' + role + '"! ATS Match ~94%', 'success');
+    showToast('Resume 1-Click Tailored to "' + role + '" (' + domain.toUpperCase() + ')! ATS Match ~94%', 'success');
   }, 400);
 }
 
@@ -2387,6 +2590,10 @@ function executeCommand(cmd) {
   else if (cmd === 'pricing') showModal('modal-pricing');
   else if (cmd === 'demo-swe') loadRoleDemo('swe');
   else if (cmd === 'demo-data') loadRoleDemo('data');
+  else if (cmd === 'demo-marketing') loadRoleDemo('marketing');
+  else if (cmd === 'demo-sales') loadRoleDemo('sales');
+  else if (cmd === 'demo-finance') loadRoleDemo('finance');
+  else if (cmd === 'demo-hr') loadRoleDemo('hr');
   else if (cmd === 'demo-pm') loadRoleDemo('pm');
 }
 
@@ -2407,6 +2614,38 @@ function loadRoleDemo(roleKey) {
     if ($('resume-input')) $('resume-input').value = sampleResume;
     showPage('analyzer');
     showToast('Loaded Data Scientist preset demo!', 'success');
+  } else if (roleKey === 'marketing') {
+    if ($('target-role')) $('target-role').value = 'Head of Growth Marketing';
+    if ($('job-desc-input')) $('job-desc-input').value = 'Requirements: SEO, Content Strategy, Brand Management, Google Analytics, Lead Generation, Copywriting, Social Media Marketing, Email Marketing, Campaign Management, A/B Testing, Market Research.';
+    if ($('tailor-role')) $('tailor-role').value = 'Head of Growth Marketing';
+    if ($('tailor-jd')) $('tailor-jd').value = 'Requirements: SEO, Content Strategy, Brand Management, Google Analytics, Lead Generation, Copywriting, Campaign Management, A/B Testing.';
+    if ($('resume-input')) $('resume-input').value = 'Alex Morgan\nSan Francisco, CA | alex.m@email.com\n\nSUMMARY\nStrategic Growth Marketer with hands-on experience in multi-channel acquisition, SEO, and Brand Management.\n\nEXPERIENCE\nGrowth Media | Senior Marketing Manager | 2021 - Present\n- Managed digital ad spend and executed SEO campaigns.\n- Analyzed conversion funnel in Google Analytics.\n\nSKILLS\nSEO, Content Strategy, Brand Management, Copywriting, Google Analytics';
+    showPage('analyzer');
+    showToast('Loaded Growth Marketing preset demo!', 'success');
+  } else if (roleKey === 'sales') {
+    if ($('target-role')) $('target-role').value = 'Enterprise Account Executive';
+    if ($('job-desc-input')) $('job-desc-input').value = 'Requirements: B2B Sales, Salesforce, Account Management, Pipeline Management, Lead Qualification, Negotiation, Revenue Growth, Contract Closing, CRM, Client Relations.';
+    if ($('tailor-role')) $('tailor-role').value = 'Enterprise Account Executive';
+    if ($('tailor-jd')) $('tailor-jd').value = 'Requirements: B2B Sales, Salesforce, Account Management, Pipeline Management, Lead Qualification, Negotiation, Revenue Growth, Contract Closing.';
+    if ($('resume-input')) $('resume-input').value = 'Alex Morgan\nNew York, NY | alex.m@email.com\n\nSUMMARY\nTop-performing B2B Sales Executive with track record in pipeline management, enterprise negotiation, and revenue growth.\n\nEXPERIENCE\nEnterprise Tech | Account Executive | 2021 - Present\n- Managed B2B sales pipeline in Salesforce.\n- Closed enterprise contracts and developed client relations.\n\nSKILLS\nB2B Sales, Salesforce, Pipeline Management, Negotiation, Account Management';
+    showPage('analyzer');
+    showToast('Loaded Enterprise Sales preset demo!', 'success');
+  } else if (roleKey === 'finance') {
+    if ($('target-role')) $('target-role').value = 'Senior Financial Analyst';
+    if ($('job-desc-input')) $('job-desc-input').value = 'Requirements: Financial Modeling, Budgeting, Financial Forecasting, GAAP, QuickBooks, Accounts Payable, Auditing, P&L Management, Variance Analysis, Cash Flow Analysis.';
+    if ($('tailor-role')) $('tailor-role').value = 'Senior Financial Analyst';
+    if ($('tailor-jd')) $('tailor-jd').value = 'Requirements: Financial Modeling, Budgeting, Financial Forecasting, GAAP, QuickBooks, P&L Management, Variance Analysis.';
+    if ($('resume-input')) $('resume-input').value = 'Alex Morgan\nChicago, IL | alex.m@email.com\n\nSUMMARY\nDetail-oriented Financial Analyst experienced in financial modeling, budgeting, and P&L analysis.\n\nEXPERIENCE\nCapital Partners | Financial Analyst | 2021 - Present\n- Built financial models and forecasts in Excel.\n- Conducted monthly variance and budgeting reviews.\n\nSKILLS\nFinancial Modeling, Budgeting, Financial Forecasting, QuickBooks, GAAP';
+    showPage('analyzer');
+    showToast('Loaded Finance & Accounting preset demo!', 'success');
+  } else if (roleKey === 'hr') {
+    if ($('target-role')) $('target-role').value = 'Human Resources Business Partner';
+    if ($('job-desc-input')) $('job-desc-input').value = 'Requirements: Talent Acquisition, HRIS, Employee Onboarding, Performance Management, Labor Law, Employee Relations, Payroll Administration, Diversity & Inclusion, Workforce Planning.';
+    if ($('tailor-role')) $('tailor-role').value = 'Human Resources Business Partner';
+    if ($('tailor-jd')) $('tailor-jd').value = 'Requirements: Talent Acquisition, HRIS, Employee Onboarding, Performance Management, Labor Law, Employee Relations.';
+    if ($('resume-input')) $('resume-input').value = 'Alex Morgan\nAustin, TX | alex.m@email.com\n\nSUMMARY\nStrategic HR Business Partner experienced in talent acquisition, employee relations, and workforce planning.\n\nEXPERIENCE\nVanguard HR | HR Generalist | 2021 - Present\n- Led employee onboarding and recruitment in HRIS.\n- Managed employee relations cases and compliance.\n\nSKILLS\nTalent Acquisition, HRIS, Employee Onboarding, Employee Relations, Labor Law';
+    showPage('analyzer');
+    showToast('Loaded HR Business Partner preset demo!', 'success');
   } else if (roleKey === 'pm') {
     if ($('target-role')) $('target-role').value = 'Technical Product Manager';
     if ($('job-desc-input')) $('job-desc-input').value = 'Requirements: Product Strategy, Agile, Scrum, User Stories, Roadmap Planning, Data Analysis, SQL, Stakeholder Management, Jira, KPI Tracking.';
@@ -2418,9 +2657,51 @@ function loadRoleDemo(roleKey) {
   }
 }
 
+/* ------------------------------ Theme Engine (Light / Dark) ------------------------------ */
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.classList.contains('dark');
+  if (isDark) {
+    html.classList.remove('dark');
+    html.classList.add('light');
+    localStorage.setItem('resumegpt_theme', 'light');
+    updateThemeUI(false);
+    showToast('Switched to Light Mode ☀️', 'info');
+  } else {
+    html.classList.remove('light');
+    html.classList.add('dark');
+    localStorage.setItem('resumegpt_theme', 'dark');
+    updateThemeUI(true);
+    showToast('Switched to Dark Mode 🌙', 'info');
+  }
+}
+
+function updateThemeUI(isDark) {
+  const icon = $('theme-icon');
+  const text = $('theme-text');
+  if (icon) icon.textContent = isDark ? 'light_mode' : 'dark_mode';
+  if (text) text.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('resumegpt_theme');
+  const html = document.documentElement;
+  if (saved === 'light') {
+    html.classList.remove('dark');
+    html.classList.add('light');
+    updateThemeUI(false);
+  } else {
+    html.classList.remove('light');
+    html.classList.add('dark');
+    updateThemeUI(true);
+  }
+}
+
 /* ------------------------------ Init ------------------------------ */
 
 document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
   renderJobs();
   computeDashboard();
   bindUpload();
