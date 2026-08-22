@@ -33,13 +33,17 @@ def get_database_url():
 DATABASE_URL = get_database_url()
 
 # Configure engine based on database type
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
 if DATABASE_URL.startswith("postgresql"):
-    # PostgreSQL configuration
+    # PostgreSQL production pool configuration
     engine = create_engine(
         DATABASE_URL,
         pool_pre_ping=True,
         pool_size=10,
         max_overflow=20,
+        pool_recycle=1800,
     )
 else:
     # SQLite configuration (default)
