@@ -1,4 +1,7 @@
 import os
+import time
+import uuid
+import json
 import logging
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -95,6 +98,31 @@ async def global_exception_handler(request: Request, exc: Exception):
             "details": str(exc) if os.getenv("DEBUG") == "True" else None,
         },
     )
+
+
+# Structured JSON Logging & Request Tracing Middleware
+@app.middleware("http")
+async def structured_logging_middleware(request: Request, call_next):
+    request_id = request.headers.get("X-Request-ID") or str(uuid.uuid4())
+    start_time = time.perf_counter()
+
+    response = await call_next(request)
+
+    latency_ms = round((time.perf_counter() - start_time) * 1000, 2)
+    response.headers["X-Request-ID"] = request_id
+    response.headers["X-Response-Time-Ms"] = str(latency_ms)
+
+    log_entry = {
+        "event": "http_request",
+        "request_id": request_id,
+        "method": request.method,
+        "path": request.url.path,
+        "status_code": response.status_code,
+        "latency_ms": latency_ms,
+        "client_ip": request.client.host if request.client else None,
+    }
+    logger.info(json.dumps(log_entry))
+    return response
 
 
 # Add CORS middleware

@@ -202,3 +202,12 @@ def test_auth_password_reset_and_gdpr_deletion():
     )
     assert fail_login.status_code == 401
 
+
+def test_structured_logging_headers():
+    """Verify that structured logging middleware sets tracing headers."""
+    response = client.get("/health")
+    assert response.status_code == 200
+    assert "x-request-id" in response.headers
+    assert "x-response-time-ms" in response.headers
+
+
