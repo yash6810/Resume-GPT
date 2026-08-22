@@ -124,3 +124,81 @@ def test_builder_templates():
     assert "executive" in template_ids
     assert "tech" in template_ids
     assert "academic" in template_ids
+
+
+def test_auth_password_reset_and_gdpr_deletion():
+    """Test forgot-password, reset-password, change-password, and GDPR user deletion."""
+    import uuid
+    uid = uuid.uuid4().hex[:6]
+    username = f"user_{uid}"
+    email = f"user_{uid}@example.com"
+    initial_password = "initial_secret_123"
+
+    # 1. Register User
+    reg_res = client.post(
+        "/auth/register",
+        json={
+            "username": username,
+            "email": email,
+            "password": initial_password,
+            "full_name": "Test Lifecycle User",
+        },
+    )
+    assert reg_res.status_code == 200
+
+    # 2. Login User
+    login_res = client.post(
+        "/auth/login",
+        json={"username": username, "password": initial_password},
+    )
+    assert login_res.status_code == 200
+    token = login_res.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    # 3. Change Password
+    new_pwd = "new_secret_456"
+    change_res = client.post(
+        "/auth/change-password",
+        headers=headers,
+        json={"old_password": initial_password, "new_password": new_pwd},
+    )
+    assert change_res.status_code == 200
+
+    # 4. Forgot Password Flow
+    forgot_res = client.post(
+        "/auth/forgot-password",
+        json={"email": email},
+    )
+    assert forgot_res.status_code == 200
+    reset_token = forgot_res.json().get("reset_token")
+    assert reset_token is not None
+
+    # 5. Reset Password via Token
+    reset_pwd = "reset_secret_789"
+    reset_res = client.post(
+        "/auth/reset-password",
+        json={"token": reset_token, "new_password": reset_pwd},
+    )
+    assert reset_res.status_code == 200
+
+    # 6. Verify Login with Reset Password
+    rel_res = client.post(
+        "/auth/login",
+        json={"username": username, "password": reset_pwd},
+    )
+    assert rel_res.status_code == 200
+    new_token = rel_res.json()["access_token"]
+    new_headers = {"Authorization": f"Bearer {new_token}"}
+
+    # 7. GDPR Delete Account
+    del_res = client.delete("/auth/me", headers=new_headers)
+    assert del_res.status_code == 200
+    assert del_res.json()["status"] == "deleted"
+
+    # 8. Verify Account No Longer Exists
+    fail_login = client.post(
+        "/auth/login",
+        json={"username": username, "password": reset_pwd},
+    )
+    assert fail_login.status_code == 401
+
