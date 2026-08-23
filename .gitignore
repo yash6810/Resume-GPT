@@ -44,8 +44,11 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Scratch & Temporary Logs
+# Agents, Scratch & Local Memory
+.agents/
 scratch/
+TASKS.md
+memory.md
 *.log
 
 # Operating System & IDE
