@@ -164,12 +164,21 @@ from fastapi.responses import FileResponse
 
 # Mount static frontend directory
 frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend"))
+dist_dir = os.path.join(frontend_dir, "dist")
+dist_assets = os.path.join(dist_dir, "assets")
+
+if os.path.exists(dist_assets):
+    app.mount("/assets", StaticFiles(directory=dist_assets), name="assets")
+
 if os.path.exists(frontend_dir):
     app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
 
 @app.get("/app", response_class=FileResponse)
 @app.get("/index.html", response_class=FileResponse)
 async def serve_frontend():
+    dist_index = os.path.join(dist_dir, "index.html")
+    if os.path.exists(dist_index):
+        return FileResponse(dist_index)
     index_path = os.path.join(frontend_dir, "index.html")
     if os.path.exists(index_path):
         return FileResponse(index_path)
@@ -177,6 +186,9 @@ async def serve_frontend():
 
 @app.get("/")
 async def root():
+    dist_index = os.path.join(dist_dir, "index.html")
+    if os.path.exists(dist_index):
+        return FileResponse(dist_index)
     index_path = os.path.join(frontend_dir, "index.html")
     if os.path.exists(index_path):
         return FileResponse(index_path)
