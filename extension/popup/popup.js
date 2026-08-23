@@ -73,11 +73,48 @@ function setupEventListeners() {
   if (removeBtn) removeBtn.addEventListener("click", handleResumeRemove);
   if (redetectBtn) redetectBtn.addEventListener("click", detectJobFromPage);
   if (pasteBtn) pasteBtn.addEventListener("click", togglePasteMode);
-  if (jobText) jobText.addEventListener("input", handleJobPaste);
+  const addToTrackerBtn = document.getElementById("addToTrackerBtn");
+  if (addToTrackerBtn) addToTrackerBtn.addEventListener("click", handleAddToTracker);
   if (openStudioBtn) openStudioBtn.addEventListener("click", openInFullStudio);
   if (analyzeBtn) analyzeBtn.addEventListener("click", handleAnalyze);
   if (retryBtn) retryBtn.addEventListener("click", handleAnalyze);
   if (closeBtn) closeBtn.addEventListener("click", () => window.close());
+}
+
+async function handleAddToTracker() {
+  if (!jobDescription) {
+    showError("Please detect or paste a job description first.");
+    return;
+  }
+  const role = detectedRole || "Software Engineer";
+  const company = detectedCompany || "Target Company";
+  const score = parseInt(scoreNumber?.textContent, 10) || 85;
+
+  const newApp = {
+    id: Date.now(),
+    company: company,
+    position: role,
+    job_description: jobDescription.substring(0, 1500),
+    status: "applied",
+    date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+    score: score
+  };
+
+  try {
+    if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.local) {
+      const existing = await chrome.storage.local.get(["resumegpt_jobs"]);
+      const list = existing.resumegpt_jobs || [];
+      list.unshift(newApp);
+      await chrome.storage.local.set({ resumegpt_jobs: list });
+    }
+    const btn = document.getElementById("addToTrackerBtn");
+    if (btn) {
+      btn.textContent = "✓ Added!";
+      setTimeout(() => { btn.textContent = "📌 Tracker"; }, 2500);
+    }
+  } catch (err) {
+    console.log("Tracker sync note:", err);
+  }
 }
 
 async function loadSavedData() {

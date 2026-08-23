@@ -278,32 +278,32 @@ def extract_jd_skills(job_description: str) -> Set[str]:
 def generate_recommendations(
     missing_skills: List[str], quality_issues: List[str]
 ) -> List[str]:
-    """Generate actionable recommendations."""
+    """Generate actionable, honest recommendations."""
     recommendations = []
 
     if missing_skills:
         recommendations.append(
-            f"Add these missing skills to your resume: {', '.join(missing_skills[:5])}"
+            f"Target Keywords to verify & incorporate (if experienced): {', '.join(missing_skills[:5])}"
         )
 
     if "metrics" in quality_issues:
         recommendations.append(
-            "Add quantifiable metrics to your experience bullets (e.g., percentages, dollar amounts)"
+            "Quantify key accomplishments with measurable metrics (e.g., %, $ revenue, latency reduction)"
         )
 
     if "action_verbs" in quality_issues:
         recommendations.append(
-            "Start more bullets with strong action verbs (e.g., Led, Developed, Implemented)"
+            "Begin experience bullets with high-impact action verbs (e.g., Architected, Engineered, Optimized)"
         )
 
     if "bullet_length" in quality_issues:
         recommendations.append(
-            "Keep bullets between 8-25 words for optimal readability"
+            "Maintain concise bullet lengths (8-25 words) for optimal recruiter scan rate"
         )
 
     if not recommendations:
         recommendations.append(
-            "Your resume looks well-optimized! Consider tailoring it further for specific roles."
+            "Your resume is strongly aligned with this job description. Ready to tailor and apply!"
         )
 
     return recommendations

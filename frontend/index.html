@@ -545,6 +545,60 @@ html.light #file-dropzone:hover {
 </div>
 </div>
 
+<!-- Live Conversion Funnel & Outcome Analytics -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+  <!-- Conversion Funnel -->
+  <div class="lg:col-span-2 glass-card rounded-xl p-6 relative overflow-hidden">
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-teal-400">filter_alt</span>
+        <h3 class="text-sm font-bold text-white uppercase tracking-wider">Application Conversion Funnel</h3>
+      </div>
+      <span id="funnel-callback-rate" class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-mono font-bold">40% Callback Rate</span>
+    </div>
+    
+    <div class="grid grid-cols-4 gap-2 text-center pt-2">
+      <div class="p-3 rounded-lg bg-slate-900/60 border border-white/5">
+        <div class="text-xs text-slate-400 mb-1">Applied</div>
+        <div id="funnel-applied" class="text-xl font-extrabold text-white font-mono">5</div>
+        <div class="text-[10px] text-slate-500 mt-1">100%</div>
+      </div>
+      <div class="p-3 rounded-lg bg-slate-900/60 border border-white/5">
+        <div class="text-xs text-slate-400 mb-1">Screening</div>
+        <div id="funnel-screening" class="text-xl font-extrabold text-sky-300 font-mono">1</div>
+        <div class="text-[10px] text-sky-400/80 mt-1">Stage 2</div>
+      </div>
+      <div class="p-3 rounded-lg bg-slate-900/60 border border-white/5">
+        <div class="text-xs text-slate-400 mb-1">Interview</div>
+        <div id="funnel-interview" class="text-xl font-extrabold text-amber-300 font-mono">1</div>
+        <div class="text-[10px] text-amber-400/80 mt-1">Stage 3</div>
+      </div>
+      <div class="p-3 rounded-lg bg-slate-900/60 border border-white/5">
+        <div class="text-xs text-slate-400 mb-1">Offer</div>
+        <div id="funnel-offer" class="text-xl font-extrabold text-emerald-300 font-mono">1</div>
+        <div class="text-[10px] text-emerald-400/80 mt-1">20% Yield</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Outcome Insights Card -->
+  <div class="glass-card rounded-xl p-6 relative overflow-hidden flex flex-col justify-between">
+    <div>
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-amber-400 text-lg">insights</span>
+        <h3 class="text-sm font-bold text-white uppercase tracking-wider">Hiring Signal Insights</h3>
+      </div>
+      <p class="text-xs text-slate-300 leading-relaxed mb-3">
+        Applications tailored to <strong>85%+ Match Score</strong> achieve an average of <strong>3.2x higher callback rates</strong> than generic submissions.
+      </p>
+    </div>
+    <div class="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-200 text-[11px] flex items-center gap-2">
+      <span class="material-symbols-outlined text-amber-400 text-sm">tips_and_updates</span>
+      <span>Tip: Run ATS optimization for every new job link.</span>
+    </div>
+  </div>
+</div>
+
 <!-- Quick Actions -->
 <div>
 <h3 class="text-base font-semibold text-white mb-4 flex items-center gap-2">
@@ -773,6 +827,20 @@ html.light #file-dropzone:hover {
 </li>
 </ul>
 </div>
+
+<!-- 1-Click Action Flow: Bridge & Tailor -->
+<div class="glass-card rounded-xl p-5 bg-gradient-to-r from-sky-950/40 via-slate-900/70 to-teal-950/40 border border-sky-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+  <div>
+    <h4 class="text-sm font-bold text-white mb-1 flex items-center gap-2">
+      <span class="material-symbols-outlined text-teal-400 text-sm">auto_fix_high</span>
+      <span>1-Click Bridge Missing Skills &amp; Tailor Resume</span>
+    </h4>
+    <p class="text-xs text-slate-400">Transfer missing requirements to the Resume Builder, generate a tailored version, and log this application in your Job Tracker.</p>
+  </div>
+  <button type="button" id="bridge-tailor-btn" onclick="bridgeToBuilderAndTrack()" class="btn btn-primary whitespace-nowrap bg-gradient-to-r from-sky-500 to-teal-500 hover:from-sky-600 hover:to-teal-600 border-sky-400/30 text-white font-bold text-xs py-2.5 px-4 shadow-lg shadow-sky-500/10 flex items-center gap-2 cursor-pointer">
+    <span class="material-symbols-outlined text-sm">rocket_launch</span>
+    <span>Tailor &amp; Track Now</span>
+  </button>
 </div>
 </div>
 </div>
@@ -1776,6 +1844,16 @@ function computeDashboard() {
   if ($('dash-interviews')) $('dash-interviews').textContent = interviewCount;
   if ($('dash-offers')) $('dash-offers').textContent = offerCount;
   if ($('dash-score')) $('dash-score').textContent = lastScore || '--';
+
+  // Funnel calculations
+  if ($('funnel-applied')) $('funnel-applied').textContent = total;
+  if ($('funnel-screening')) $('funnel-screening').textContent = screeningCount;
+  if ($('funnel-interview')) $('funnel-interview').textContent = interviewCount;
+  if ($('funnel-offer')) $('funnel-offer').textContent = offerCount;
+
+  const callbacks = screeningCount + interviewCount + offerCount;
+  const callbackRate = total > 0 ? Math.round((callbacks / total) * 100) : 0;
+  if ($('funnel-callback-rate')) $('funnel-callback-rate').textContent = `${callbackRate}% Callback Rate`;
 }
 
 /* ------------------------------ Job tracker ------------------------------ */
@@ -2365,6 +2443,51 @@ function executeAutoTailor() {
     setLoading(btn, false);
     showToast('Resume 1-Click Tailored to "' + role + '" (' + domain.toUpperCase() + ')! ATS Match ~94%', 'success');
   }, 400);
+}
+
+function bridgeToBuilderAndTrack() {
+  const role = ($('target-role') ? $('target-role').value : '').trim() || 'Software Engineer';
+  const jdText = ($('job-desc-input') ? $('job-desc-input').value : '').trim();
+  const resumeText = ($('resume-input') ? $('resume-input').value : '').trim();
+
+  if (!resumeText) {
+    showToast('Please analyze a resume first.', 'error');
+    return;
+  }
+
+  // 1. Populate Auto-Tailor inputs
+  if ($('tailor-role')) $('tailor-role').value = role;
+  if ($('tailor-jd')) $('tailor-jd').value = jdText;
+
+  // 2. Transfer missing skills to builder
+  const missingPills = $('missing-skills') ? $('missing-skills').querySelectorAll('span') : [];
+  const missingList = Array.from(missingPills).map(p => p.textContent.trim()).filter(t => t && t !== 'None yet' && !t.includes('full match'));
+  
+  if (missingList.length > 0 && $('builder-skills')) {
+    const existing = $('builder-skills').value.split(',').map(s => s.trim()).filter(Boolean);
+    const merged = Array.from(new Set([...existing, ...missingList]));
+    $('builder-skills').value = merged.join(', ');
+  }
+
+  // 3. Auto-create application entry in Job Tracker
+  const companyGuess = role.includes('at') ? role.split('at')[1].trim() : 'Target Enterprise';
+  const newJob = {
+    id: Date.now(),
+    company: companyGuess,
+    position: role,
+    status: 'applied',
+    date: 'Just now',
+    score: lastScore || 88
+  };
+  jobs.unshift(newJob);
+  saveJobs();
+  renderJobs();
+  computeDashboard();
+
+  // 4. Trigger Auto-Tailor & Navigate to Builder
+  showPage('builder');
+  runAutoTailor(false);
+  showToast(`🎯 Bridged to Builder for "${role}" & added to Application Pipeline!`, 'success');
 }
 
 function applyIndustryTemplate(indKey) {

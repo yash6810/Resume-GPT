@@ -45,6 +45,10 @@ class RewriteRequest(BaseModel):
 
 class RewriteResponse(BaseModel):
     variants: List[str]  # ["ATS-optimized version", "Human-friendly version"]
+    verification_note: Optional[str] = (
+        "Anti-Fabrication Guard: Only add recommended skills if you have verifiable hands-on experience."
+    )
+    authenticity_score: Optional[float] = 1.0
 
 
 # Cover Letter Models

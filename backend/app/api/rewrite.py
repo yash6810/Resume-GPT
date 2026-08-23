@@ -128,15 +128,33 @@ async def rewrite_bullet(request: RewriteRequest):
         raise HTTPException(status_code=400, detail="Target keywords are required")
 
     try:
+        # Check if target keywords overlap with the bullet
+        overlap = [k for k in request.target_keywords if k.lower() in request.bullet.lower()]
+        new_keywords = [k for k in request.target_keywords if k.lower() not in request.bullet.lower()]
+        
+        verification_note = (
+            "Anti-Fabrication Guard: All target skills verified in bullet text."
+            if not new_keywords
+            else f"Anti-Fabrication Guard: Added target keywords ({', '.join(new_keywords)}). Verify you have hands-on experience before including in job applications."
+        )
+
         # Try LLM first
         llm_result = rewrite_bullet_with_llm(request.bullet, request.target_keywords)
         if llm_result:
-            return RewriteResponse(variants=llm_result)
+            return RewriteResponse(
+                variants=llm_result,
+                verification_note=verification_note,
+                authenticity_score=0.95 if new_keywords else 1.0,
+            )
 
         # Fall back to rule-based approach
         ats_variant = generate_ats_variant(request.bullet, request.target_keywords)
         human_variant = generate_human_variant(request.bullet, request.target_keywords)
 
-        return RewriteResponse(variants=[ats_variant, human_variant])
+        return RewriteResponse(
+            variants=[ats_variant, human_variant],
+            verification_note=verification_note,
+            authenticity_score=0.9 if new_keywords else 1.0,
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error rewriting bullet: {str(e)}")
