@@ -105,7 +105,6 @@ export function Analyzer({ setActivePage, openModal }) {
   const handleBridgeToBuilder = () => {
     if (!results) return;
 
-    // Add job to tracker
     addJob({
       company: 'Target Enterprise',
       position: role,
@@ -118,213 +117,289 @@ export function Analyzer({ setActivePage, openModal }) {
   };
 
   return (
-    <div className="fade-in" style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      {/* Header */}
+    <div className="fade-in" style={{ padding: '2rem', maxWidth: '1280px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+      {/* Top Header & Breadcrumb */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#fff', letterSpacing: '-0.025em' }}>
-            ATS Match &amp; Screening Readiness Analyzer
-          </h1>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.35rem' }}>
-            <span style={{ fontSize: '12px', color: '#94a3b8' }}>Target Role:</span>
-            <input
-              type="text"
-              id="target-role"
-              className="field"
-              style={{ width: 'auto', padding: '0.25rem 0.6rem', fontSize: '12px' }}
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-            />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+            <span style={{ fontSize: '0.8125rem', fontWeight: '600', color: 'var(--text-muted)' }}>Workspace</span>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--border-color)' }}>/</span>
+            <span style={{ fontSize: '0.8125rem', fontWeight: '600', color: 'var(--accent-blue)' }}>Resume Analysis</span>
           </div>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+            Analysis: <span style={{ color: 'var(--text-secondary)', fontWeight: '500' }}>{role}</span>
+          </h1>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', gap: '0.625rem' }}>
           <button onClick={() => openModal('bulletRewriter')} className="btn btn-ghost">
-            <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>auto_fix_high</span>
-            <span>Bullet Rewriter</span>
+            <span className="material-symbols-outlined" style={{ fontSize: '1.1rem' }}>auto_fix_high</span>
+            <span>STAR Bullet Coach</span>
           </button>
           <button id="analyze-btn" onClick={handleAnalyze} disabled={loading} className="btn btn-primary">
-            <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>speed</span>
-            <span>{loading ? 'Analyzing...' : 'Run ATS Analysis'}</span>
+            <span className="material-symbols-outlined" style={{ fontSize: '1.1rem' }}>speed</span>
+            <span>{loading ? 'Analyzing...' : 'Run Analysis'}</span>
           </button>
         </div>
       </div>
 
-      {/* Input Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+      {/* Input Split Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '1.25rem' }}>
         {/* Resume Input */}
-        <div className="glass-card" style={{ borderRadius: '1rem', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-          <div style={{ padding: '0.75rem 1rem', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', backgroundColor: 'rgba(15, 23, 42, 0.6)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '12px', fontWeight: '700', color: '#38bdf8', textTransform: 'uppercase' }}>1. Resume Text</span>
-            <label style={{ cursor: 'pointer', fontSize: '11px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-              <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>upload_file</span>
-              <span>Upload PDF/DOCX</span>
+        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          <div style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: '1rem', color: 'var(--accent-sky)' }}>description</span>
+              <span style={{ fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-primary)' }}>1. Candidate Resume</span>
+            </div>
+            <label style={{ cursor: 'pointer', fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: '0.95rem' }}>upload_file</span>
+              <span>Upload File</span>
               <input type="file" accept=".pdf,.docx,.txt" onChange={handleFileUpload} style={{ display: 'none' }} />
             </label>
           </div>
           <textarea
             id="resume-input"
-            rows={12}
+            rows={10}
             className="field field-mono"
-            style={{ border: 'none', borderRadius: 0, resize: 'vertical', fontSize: '12px', lineHeight: '1.6' }}
+            style={{ border: 'none', borderRadius: 0, resize: 'vertical', fontSize: '12px', lineHeight: '1.6', background: 'transparent' }}
             value={resumeText}
             onChange={(e) => setResumeText(e.target.value)}
           />
         </div>
 
         {/* Job Description Input */}
-        <div className="glass-card" style={{ borderRadius: '1rem', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-          <div style={{ padding: '0.75rem 1rem', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', backgroundColor: 'rgba(15, 23, 42, 0.6)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '12px', fontWeight: '700', color: '#14b8a6', textTransform: 'uppercase' }}>2. Job Description</span>
-            <button onClick={() => setJobDesc(SAMPLE_JD)} style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: '11px', cursor: 'pointer' }}>Load Sample</button>
+        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          <div style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: '1rem', color: 'var(--accent-emerald)' }}>work</span>
+              <span style={{ fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-primary)' }}>2. Target Job Description</span>
+            </div>
+            <button onClick={() => setJobDesc(SAMPLE_JD)} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', fontSize: '0.75rem', cursor: 'pointer' }}>
+              Load Sample
+            </button>
           </div>
           <textarea
             id="job-desc-input"
-            rows={12}
+            rows={10}
             className="field field-mono"
-            style={{ border: 'none', borderRadius: 0, resize: 'vertical', fontSize: '12px', lineHeight: '1.6' }}
+            style={{ border: 'none', borderRadius: 0, resize: 'vertical', fontSize: '12px', lineHeight: '1.6', background: 'transparent' }}
             value={jobDesc}
             onChange={(e) => setJobDesc(e.target.value)}
           />
         </div>
       </div>
 
-      {/* Analysis Results Display */}
+      {/* Analysis Results & Dashboard Overview */}
       {results && (
-        <div className="fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          {/* Main Score & Diff Header */}
-          <div className="glass-card" style={{ padding: '1.5rem', borderRadius: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-              <div style={{
-                width: '88px',
-                height: '88px',
-                borderRadius: '50%',
-                border: '4px solid #10b981',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 0 20px rgba(16, 185, 129, 0.3)',
-                backgroundColor: 'rgba(15, 23, 42, 0.8)'
-              }}>
-                <span id="ats-score" style={{ fontSize: '1.75rem', fontWeight: '800', color: '#fff', fontFamily: 'var(--font-mono)' }}>
-                  {Math.round(results.ats_score || 88)}
-                </span>
-                <span style={{ fontSize: '10px', color: '#94a3b8' }}>/ 100</span>
-              </div>
-              <div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#fff' }}>
-                  {results.ats_score >= 80 ? 'Strong Candidate Match' : 'Moderate Match — Optimization Recommended'}
-                </h3>
-                <p style={{ fontSize: '0.8125rem', color: '#94a3b8', marginTop: '0.2rem' }}>
-                  Objective Screening Readiness computed across keywords, role alignment, and quantified evidence.
-                </p>
-              </div>
-            </div>
-
-            {/* Score Delta Diff */}
-            {prevScore && (
-              <div id="ats-diff-card" style={{ padding: '0.75rem 1.25rem', borderRadius: '0.75rem', backgroundColor: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.3)', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <div>
-                  <div style={{ fontSize: '10px', color: '#94a3b8', textTransform: 'uppercase' }}>Baseline</div>
-                  <div style={{ fontSize: '1.25rem', fontWeight: '800', color: '#94a3b8', fontFamily: 'var(--font-mono)' }}>{prevScore}%</div>
-                </div>
-                <span className="material-symbols-outlined" style={{ color: '#10b981' }}>arrow_forward</span>
-                <div>
-                  <div style={{ fontSize: '10px', color: '#10b981', textTransform: 'uppercase' }}>Optimized</div>
-                  <div style={{ fontSize: '1.25rem', fontWeight: '800', color: '#10b981', fontFamily: 'var(--font-mono)' }}>{Math.round(results.ats_score)}%</div>
-                </div>
-                <span id="diff-delta-badge" style={{ padding: '0.2rem 0.5rem', borderRadius: '9999px', fontSize: '11px', fontWeight: '700', backgroundColor: 'rgba(16, 185, 129, 0.2)', color: '#6ee7b7' }}>
-                  +{scoreDelta}% Lift
+        <div className="fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          {/* Top Diagnostics Row (Gauge, Subscores, STAR Coach) */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
+            {/* ATS Match Gauge */}
+            <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <span style={{ fontSize: '0.8125rem', fontWeight: '600', color: 'var(--text-secondary)' }}>ATS Compatibility Gauge</span>
+                <span className="status-pill status-found">
+                  {results.ats_score >= 80 ? 'Strong Match' : 'Optimization Required'}
                 </span>
               </div>
-            )}
-          </div>
 
-          {/* Subscores */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '1rem' }}>
-            <div className="glass-card" style={{ padding: '1rem', borderRadius: '0.75rem', textAlign: 'center' }}>
-              <div style={{ fontSize: '11px', color: '#94a3b8', textTransform: 'uppercase', fontWeight: '600' }}>Keywords</div>
-              <div id="sub-keywords" style={{ fontSize: '1.5rem', fontWeight: '800', color: '#38bdf8', marginTop: '0.25rem', fontFamily: 'var(--font-mono)' }}>
-                {results.subscores?.keywords || 36}/40
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1rem 0' }}>
+                <div style={{
+                  width: '120px',
+                  height: '120px',
+                  borderRadius: '50%',
+                  background: `conic-gradient(var(--accent-blue) 0% ${Math.round(results.ats_score || 88)}%, var(--border-color) ${Math.round(results.ats_score || 88)}% 100%)`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '10px'
+                }}>
+                  <div style={{
+                    width: '100px',
+                    height: '100px',
+                    borderRadius: '50%',
+                    backgroundColor: 'var(--bg-secondary)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <span id="ats-score" style={{ fontSize: '1.75rem', fontWeight: '800', fontFamily: 'var(--font-mono)', color: 'var(--text-primary)' }}>
+                      {Math.round(results.ats_score || 88)}%
+                    </span>
+                    <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Match Score</span>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="glass-card" style={{ padding: '1rem', borderRadius: '0.75rem', textAlign: 'center' }}>
-              <div style={{ fontSize: '11px', color: '#94a3b8', textTransform: 'uppercase', fontWeight: '600' }}>Role Match</div>
-              <div id="sub-role" style={{ fontSize: '1.5rem', fontWeight: '800', color: '#14b8a6', marginTop: '0.25rem', fontFamily: 'var(--font-mono)' }}>
-                {results.subscores?.role_match || 26}/30
-              </div>
-            </div>
-            <div className="glass-card" style={{ padding: '1rem', borderRadius: '0.75rem', textAlign: 'center' }}>
-              <div style={{ fontSize: '11px', color: '#94a3b8', textTransform: 'uppercase', fontWeight: '600' }}>Experience</div>
-              <div id="sub-exp" style={{ fontSize: '1.5rem', fontWeight: '800', color: '#f59e0b', marginTop: '0.25rem', fontFamily: 'var(--font-mono)' }}>
-                {results.subscores?.experience_relevance || 18}/20
-              </div>
-            </div>
-            <div className="glass-card" style={{ padding: '1rem', borderRadius: '0.75rem', textAlign: 'center' }}>
-              <div style={{ fontSize: '11px', color: '#94a3b8', textTransform: 'uppercase', fontWeight: '600' }}>Formatting</div>
-              <div id="sub-quality" style={{ fontSize: '1.5rem', fontWeight: '800', color: '#a855f7', marginTop: '0.25rem', fontFamily: 'var(--font-mono)' }}>
-                {results.subscores?.quality || 9}/10
-              </div>
-            </div>
-          </div>
 
-          {/* Matched & Missing Skills */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
-            <div className="glass-card" style={{ padding: '1.25rem', borderRadius: '1rem' }}>
-              <h4 style={{ fontSize: '0.875rem', fontWeight: '700', color: '#10b981', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                <span className="material-symbols-outlined" style={{ fontSize: '1.1rem' }}>check_circle</span>
-                Matched Keywords ({results.skill_matches?.length || 0})
-              </h4>
-              <div id="matched-skills" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                {results.skill_matches?.map((s, idx) => (
-                  <span key={idx} style={{ padding: '0.25rem 0.6rem', borderRadius: '0.5rem', backgroundColor: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', color: '#6ee7b7', fontSize: '12px', fontFamily: 'var(--font-mono)' }}>
-                    {typeof s === 'string' ? s : s.skill}
-                  </span>
-                ))}
-              </div>
+              {prevScore && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '0.75rem', borderTop: '1px solid var(--border-subtle)', fontSize: '0.75rem' }}>
+                  <span style={{ color: 'var(--text-muted)' }}>Baseline: {prevScore}%</span>
+                  <span style={{ color: 'var(--accent-emerald)', fontWeight: '700' }}>+{scoreDelta}% ATS Lift</span>
+                </div>
+              )}
             </div>
 
-            <div className="glass-card" style={{ padding: '1.25rem', borderRadius: '1rem', borderLeft: '3px solid #f43f5e' }}>
-              <h4 style={{ fontSize: '0.875rem', fontWeight: '700', color: '#f43f5e', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                <span className="material-symbols-outlined" style={{ fontSize: '1.1rem' }}>cancel</span>
-                Missing Keywords ({results.missing_skills?.length || 0})
-              </h4>
-              <div id="missing-skills" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                {results.missing_skills?.map((s, idx) => (
-                  <span key={idx} style={{ padding: '0.25rem 0.6rem', borderRadius: '0.5rem', backgroundColor: 'rgba(244, 63, 94, 0.15)', border: '1px solid rgba(244, 63, 94, 0.3)', color: '#fda4af', fontSize: '12px', fontFamily: 'var(--font-mono)' }}>
-                    {s}
-                  </span>
-                ))}
+            {/* Diagnostic Subscores Progress Bars */}
+            <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.8125rem', fontWeight: '600', color: 'var(--text-secondary)' }}>Diagnostic Subscores</span>
+                <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Weighted Metrics</span>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.35rem' }}>
+                    <span style={{ color: 'var(--text-primary)' }}>Keywords Match</span>
+                    <span id="sub-keywords" style={{ fontFamily: 'var(--font-mono)', fontWeight: '600', color: 'var(--accent-blue)' }}>
+                      {results.subscores?.keywords || 36}/40
+                    </span>
+                  </div>
+                  <div className="meter-container">
+                    <div className="meter-fill meter-blue" style={{ width: `${((results.subscores?.keywords || 36) / 40) * 100}%` }}></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.35rem' }}>
+                    <span style={{ color: 'var(--text-primary)' }}>Role Relevance</span>
+                    <span id="sub-role" style={{ fontFamily: 'var(--font-mono)', fontWeight: '600', color: 'var(--accent-emerald)' }}>
+                      {results.subscores?.role_match || 26}/30
+                    </span>
+                  </div>
+                  <div className="meter-container">
+                    <div className="meter-fill meter-emerald" style={{ width: `${((results.subscores?.role_match || 26) / 30) * 100}%` }}></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.35rem' }}>
+                    <span style={{ color: 'var(--text-primary)' }}>Experience Impact</span>
+                    <span id="sub-exp" style={{ fontFamily: 'var(--font-mono)', fontWeight: '600', color: 'var(--accent-amber)' }}>
+                      {results.subscores?.experience_relevance || 18}/20
+                    </span>
+                  </div>
+                  <div className="meter-container">
+                    <div className="meter-fill meter-amber" style={{ width: `${((results.subscores?.experience_relevance || 18) / 20) * 100}%` }}></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.35rem' }}>
+                    <span style={{ color: 'var(--text-primary)' }}>Formatting &amp; Structure</span>
+                    <span id="sub-quality" style={{ fontFamily: 'var(--font-mono)', fontWeight: '600', color: 'var(--text-secondary)' }}>
+                      {results.subscores?.quality || 9}/10
+                    </span>
+                  </div>
+                  <div className="meter-container">
+                    <div className="meter-fill meter-blue" style={{ width: `${((results.subscores?.quality || 9) / 10) * 100}%` }}></div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Action Recommendations & 1-Click Bridge */}
-          <div className="glass-card" style={{ padding: '1.5rem', borderRadius: '1rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <h4 style={{ fontSize: '0.875rem', fontWeight: '700', color: '#fff', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span className="material-symbols-outlined" style={{ color: '#38bdf8' }}>tips_and_updates</span>
-              Actionable Coaching Recommendations
-            </h4>
-            <ul id="recommendations-list" style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.8125rem', color: '#cbd5e1' }}>
-              {results.recommendations?.map((r, idx) => (
-                <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
-                  <span className="material-symbols-outlined" style={{ fontSize: '1rem', color: '#38bdf8' }}>arrow_right</span>
-                  <span>{r}</span>
-                </li>
-              ))}
-            </ul>
-
-            {/* 1-Click Bridge Action */}
-            <div style={{ marginTop: '0.5rem', padding: '1rem', borderRadius: '0.75rem', background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(20, 184, 166, 0.15) 100%)', border: '1px solid rgba(56, 189, 248, 0.3)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+            {/* STAR Bullet Coaching Widget */}
+            <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>
-                <div style={{ fontSize: '0.875rem', fontWeight: '700', color: '#fff' }}>1-Click Bridge Missing Skills &amp; Tailor Resume</div>
-                <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '0.2rem' }}>Automatically populates the Resume Builder with missing requirements and tracks this job.</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                  <span style={{ fontSize: '0.8125rem', fontWeight: '600', color: 'var(--text-secondary)' }}>STAR Bullet Optimizer</span>
+                  <span className="status-pill status-partial">Coaching Mode</span>
+                </div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
+                  Convert passive claims into quantified accomplishment statements.
+                </div>
+                <div style={{ padding: '0.75rem', borderRadius: '0.5rem', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)', marginBottom: '0.5rem', fontSize: '11px', lineHeight: '1.5' }}>
+                  <div style={{ color: 'var(--accent-rose)', marginBottom: '0.25rem' }}>❌ <i>"Responsible for building microservices."</i></div>
+                  <div style={{ color: 'var(--accent-emerald)' }}>✅ <b>"Architected 12 microservices with FastAPI, scaling throughput to 15M req/day."</b></div>
+                </div>
               </div>
-              <button id="bridge-tailor-btn" onClick={handleBridgeToBuilder} className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.8125rem' }}>
-                🚀 Tailor &amp; Track Now
+
+              <button onClick={() => openModal('bulletRewriter')} className="btn btn-ghost" style={{ width: '100%', fontSize: '0.75rem', padding: '0.5rem' }}>
+                Open Rewriter Studio
               </button>
             </div>
+          </div>
+
+          {/* Tabular Keyword Match Matrix (Linear Table Style) */}
+          <div className="glass-card" style={{ overflow: 'hidden' }}>
+            <div style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '0.875rem', fontWeight: '700', color: 'var(--text-primary)' }}>Resume vs. Job Keyword Match Matrix</span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                {results.skill_matches?.length || 0} Matched • {results.missing_skills?.length || 0} Missing
+              </span>
+            </div>
+
+            <table className="matrix-table">
+              <thead>
+                <tr>
+                  <th className="matrix-th">Target Skill / Keyword</th>
+                  <th className="matrix-th">Status</th>
+                  <th className="matrix-th">Category Context</th>
+                  <th className="matrix-th" style={{ textAlign: 'right' }}>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {results.skill_matches?.map((s, idx) => {
+                  const skillName = typeof s === 'string' ? s : s.skill;
+                  return (
+                    <tr key={`matched-${idx}`} className="matrix-tr">
+                      <td className="matrix-td">
+                        <span style={{ fontWeight: '600', fontFamily: 'var(--font-mono)' }}>{skillName}</span>
+                      </td>
+                      <td className="matrix-td">
+                        <span className="status-pill status-found">Matched</span>
+                      </td>
+                      <td className="matrix-td">
+                        <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Verified in Resume</span>
+                      </td>
+                      <td className="matrix-td" style={{ textAlign: 'right' }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: '1rem', color: 'var(--accent-emerald)' }}>check</span>
+                      </td>
+                    </tr>
+                  );
+                })}
+
+                {results.missing_skills?.map((s, idx) => (
+                  <tr key={`missing-${idx}`} className="matrix-tr">
+                    <td className="matrix-td">
+                      <span style={{ fontWeight: '600', fontFamily: 'var(--font-mono)', color: 'var(--accent-rose)' }}>{s}</span>
+                    </td>
+                    <td className="matrix-td">
+                      <span className="status-pill status-missing">Missing</span>
+                    </td>
+                    <td className="matrix-td">
+                      <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Required by Job Description</span>
+                    </td>
+                    <td className="matrix-td" style={{ textAlign: 'right' }}>
+                      <button
+                        onClick={handleBridgeToBuilder}
+                        className="btn btn-ghost"
+                        style={{ padding: '0.2rem 0.5rem', fontSize: '11px', color: 'var(--accent-sky)' }}
+                      >
+                        + Inject
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* 1-Click Bridge Banner */}
+          <div className="glass-card" style={{ padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', borderLeft: '3px solid var(--accent-blue)' }}>
+            <div>
+              <div style={{ fontSize: '0.875rem', fontWeight: '700', color: 'var(--text-primary)' }}>
+                Bridge Missing Skills &amp; Auto-Tailor Resume
+              </div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+                Seamlessly transfer missing keywords directly into the structured resume builder and create a tracked application.
+              </div>
+            </div>
+            <button id="bridge-tailor-btn" onClick={handleBridgeToBuilder} className="btn btn-primary">
+              <span className="material-symbols-outlined" style={{ fontSize: '1.1rem' }}>auto_fix</span>
+              <span>Tailor &amp; Track Application</span>
+            </button>
           </div>
         </div>
       )}

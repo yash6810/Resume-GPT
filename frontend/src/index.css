@@ -1,35 +1,68 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --bg-primary: #0a0f1d;
-  --bg-secondary: #0f172a;
-  --bg-card: rgba(15, 23, 42, 0.75);
-  --bg-card-hover: rgba(30, 41, 59, 0.85);
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-color-hover: rgba(56, 189, 248, 0.3);
+  /* Linear + Stripe Dark Mode (Default) */
+  --bg-primary: #0c0e12;
+  --bg-secondary: #12151b;
+  --bg-card: #151921;
+  --bg-card-hover: #1b202a;
+  --border-color: #232730;
+  --border-color-hover: #38bdf8;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+
+  /* Linear Electric Blue + Stripe Accents */
+  --accent-blue: #2563eb;
+  --accent-blue-hover: #1d4ed8;
+  --accent-blue-glow: rgba(37, 99, 235, 0.25);
   --accent-sky: #38bdf8;
-  --accent-teal: #14b8a6;
   --accent-emerald: #10b981;
-  --accent-rose: #f43f5e;
+  --accent-emerald-subtle: rgba(16, 185, 129, 0.12);
   --accent-amber: #f59e0b;
-  --accent-purple: #a855f7;
+  --accent-amber-subtle: rgba(245, 158, 11, 0.12);
+  --accent-rose: #f43f5e;
+  --accent-rose-subtle: rgba(244, 63, 94, 0.12);
+  --accent-purple: #8b5cf6;
+
+  /* Typography */
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
   --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+
+  /* Shadows */
+  --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+  --shadow-hover: 0 10px 30px -5px rgba(0, 0, 0, 0.7);
 }
 
 .light {
+  /* Stripe Luxury Light Mode */
   --bg-primary: #f8fafc;
   --bg-secondary: #ffffff;
-  --bg-card: rgba(255, 255, 255, 0.9);
-  --bg-card-hover: rgba(241, 245, 249, 0.95);
-  --border-color: rgba(0, 0, 0, 0.08);
-  --border-color-hover: rgba(2, 132, 199, 0.4);
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --border-color: #e2e8f0;
+  --border-color-hover: #2563eb;
+  --border-subtle: rgba(0, 0, 0, 0.05);
+
+  --accent-blue: #2563eb;
+  --accent-blue-hover: #1d4ed8;
+  --accent-blue-glow: rgba(37, 99, 235, 0.15);
+  --accent-sky: #0284c7;
+  --accent-emerald: #059669;
+  --accent-emerald-subtle: rgba(5, 150, 105, 0.1);
+  --accent-amber: #d97706;
+  --accent-amber-subtle: rgba(217, 119, 6, 0.1);
+  --accent-rose: #e11d48;
+  --accent-rose-subtle: rgba(225, 29, 72, 0.1);
+  --accent-purple: #7c3aed;
+
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-muted: #94a3b8;
+
+  --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+  --shadow-hover: 0 10px 30px -5px rgba(15, 23, 42, 0.1);
 }
 
 * {
@@ -47,18 +80,17 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Glassmorphic Cards */
+/* Linear + Stripe Refined Cards */
 .glass-card {
   background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-color);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow-card);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-card:hover {
-  border-color: var(--border-color-hover);
+  border-color: rgba(59, 130, 246, 0.4);
 }
 
 .glass-card-interactive {
@@ -67,7 +99,122 @@ html, body {
 
 .glass-card-interactive:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 40px 0 rgba(56, 189, 248, 0.15);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--accent-blue);
+}
+
+/* Linear Command-Bar Navigation */
+.command-search {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.command-search:focus-within {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px var(--accent-blue-glow);
+  color: var(--text-primary);
+}
+
+/* Status Pills & Tags */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  font-family: var(--font-sans);
+}
+
+.status-found {
+  background: var(--accent-emerald-subtle);
+  color: var(--accent-emerald);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.status-missing {
+  background: var(--accent-rose-subtle);
+  color: var(--accent-rose);
+  border: 1px solid rgba(244, 63, 94, 0.25);
+}
+
+.status-partial {
+  background: var(--accent-amber-subtle);
+  color: var(--accent-amber);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.status-neutral {
+  background: rgba(148, 163, 184, 0.1);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+/* Tabular Matrix (Linear Style) */
+.matrix-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.875rem;
+}
+
+.matrix-th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.matrix-td {
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.matrix-tr:hover .matrix-td {
+  background: var(--bg-card-hover);
+}
+
+/* Progress & Diagnostic Subscore Meters */
+.meter-container {
+  width: 100%;
+  height: 0.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.meter-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.meter-blue {
+  background: linear-gradient(90deg, #2563eb, #38bdf8);
+}
+
+.meter-emerald {
+  background: linear-gradient(90deg, #059669, #10b981);
+}
+
+.meter-amber {
+  background: linear-gradient(90deg, #d97706, #f59e0b);
 }
 
 /* Button System */
@@ -88,46 +235,46 @@ html, body {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  background: var(--accent-blue);
   color: #ffffff;
-  border-color: rgba(56, 189, 248, 0.3);
-  box-shadow: 0 4px 14px 0 rgba(2, 132, 199, 0.35);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 10px var(--accent-blue-glow);
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
-  box-shadow: 0 6px 20px 0 rgba(2, 132, 199, 0.5);
+  background: var(--accent-blue-hover);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
   transform: translateY(-1px);
 }
 
 .btn-ghost {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-secondary);
   color: var(--text-secondary);
   border-color: var(--border-color);
 }
 
 .btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-card-hover);
   color: var(--text-primary);
   border-color: rgba(255, 255, 255, 0.2);
 }
 
 .btn-accent {
-  background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+  background: var(--accent-emerald);
   color: #ffffff;
-  border-color: rgba(20, 184, 166, 0.4);
+  border-color: rgba(16, 185, 129, 0.3);
 }
 
 .btn-accent:hover {
-  background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+  background: #059669;
   transform: translateY(-1px);
 }
 
-/* Inputs & Form Controls */
+/* Form Fields */
 .field {
   width: 100%;
   padding: 0.625rem 0.875rem;
-  background-color: rgba(15, 23, 42, 0.8);
+  background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 0.5rem;
   color: var(--text-primary);
@@ -138,8 +285,8 @@ html, body {
 }
 
 .field:focus {
-  border-color: var(--accent-sky);
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px var(--accent-blue-glow);
 }
 
 .field-mono {
@@ -176,8 +323,8 @@ html, body {
 }
 
 @keyframes pulseGlow {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6)); }
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; filter: drop-shadow(0 0 10px rgba(37, 99, 235, 0.6)); }
 }
 
 .pulse-glow {
