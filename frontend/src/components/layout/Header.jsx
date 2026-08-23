@@ -1,8 +1,10 @@
 import React from 'react';
 import { useAuth } from '../../hooks/useAuth';
+import { useTheme } from '../../hooks/useTheme';
 
 export function Header({ openModal, toggleNotifs }) {
   const { user, isAuthenticated, logout } = useAuth();
+  const { theme, toggleTheme, isLight } = useTheme();
 
   return (
     <header style={{
@@ -49,6 +51,34 @@ export function Header({ openModal, toggleNotifs }) {
           <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--accent-emerald)' }}></span>
           ATS Engine Online
         </span>
+
+        {/* Theme Toggle Button */}
+        <button
+          onClick={toggleTheme}
+          style={{
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border-color)',
+            color: 'var(--text-primary)',
+            cursor: 'pointer',
+            padding: '0.4rem 0.65rem',
+            borderRadius: '0.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.4rem',
+            fontSize: '0.75rem',
+            fontWeight: '600',
+            transition: 'all 0.2s ease',
+            boxShadow: 'var(--specular-highlight)'
+          }}
+          title={isLight ? "Switch to Dark Mode" : "Switch to Light Mode"}
+        >
+          <span className="material-symbols-outlined" style={{ fontSize: '1.1rem', color: isLight ? 'var(--apple-orange)' : 'var(--apple-blue)' }}>
+            {isLight ? 'light_mode' : 'dark_mode'}
+          </span>
+          <span style={{ fontSize: '11px', textTransform: 'capitalize' }}>
+            {theme}
+          </span>
+        </button>
 
         <button
           onClick={toggleNotifs}

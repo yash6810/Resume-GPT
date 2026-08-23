@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ToastProvider } from './hooks/useToast';
 import { AuthProvider } from './hooks/useAuth';
 import { JobsProvider } from './hooks/useJobs';
+import { ThemeProvider } from './hooks/useTheme';
 
 import { Sidebar } from './components/layout/Sidebar';
 import { Header } from './components/layout/Header';
@@ -83,12 +84,14 @@ export function AppContent() {
 
 export default function App() {
   return (
-    <ToastProvider>
-      <AuthProvider>
-        <JobsProvider>
-          <AppContent />
-        </JobsProvider>
-      </AuthProvider>
-    </ToastProvider>
+    <ThemeProvider>
+      <ToastProvider>
+        <AuthProvider>
+          <JobsProvider>
+            <AppContent />
+          </JobsProvider>
+        </AuthProvider>
+      </ToastProvider>
+    </ThemeProvider>
   );
 }
