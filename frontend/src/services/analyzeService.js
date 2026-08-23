@@ -37,6 +37,7 @@ export async function parseResumeFile(file) {
   const base = getApiBase();
   const token = getAuthToken();
   const formData = new FormData();
+  formData.append('resume', file);
   formData.append('file', file);
 
   const headers = {};
@@ -61,13 +62,13 @@ export async function rewriteBullet(bullet, targetKeywords) {
     method: 'POST',
     body: JSON.stringify({
       bullet,
-      target_keywords: targetKeywords,
+      target_keywords: targetKeywords || [],
     }),
   });
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: 'Rewrite failed' }));
-    throw new Error(err.detail || 'Bullet rewriting failed');
+    throw new Error(err.detail || 'Bullet rewrite failed');
   }
 
   return res.json();
