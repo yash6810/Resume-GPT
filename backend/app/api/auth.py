@@ -154,6 +154,26 @@ def login_user(user: UserLogin, db: Session = Depends(get_db)):
     return {"access_token": access_token, "token_type": "bearer"}
 
 
+@router.post("/auth/token", response_model=Token)
+def login_token(
+    form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
+):
+    """OAuth2 compatible token login"""
+    db_user = db.query(User).filter(User.username == form_data.username).first()
+    if not db_user or not verify_password(form_data.password, db_user.hashed_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": db_user.username}, expires_delta=access_token_expires
+    )
+    return {"access_token": access_token, "token_type": "bearer"}
+
+
 @router.get("/auth/me", response_model=UserResponse)
 def get_user_profile(current_user: User = Depends(get_current_user)):
     """Get current user profile"""

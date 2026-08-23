@@ -1,14 +1,9 @@
 import { request, setAuthToken } from './api.js';
 
 export async function login(username, password) {
-  const formData = new URLSearchParams();
-  formData.append('username', username);
-  formData.append('password', password);
-
-  const res = await request('/auth/token', {
+  const res = await request('/auth/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: formData.toString(),
+    body: JSON.stringify({ username, password }),
   });
 
   if (!res.ok) {
