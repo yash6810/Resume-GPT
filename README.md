@@ -16,11 +16,12 @@ ResumeGPT evaluates keyword coverage, role alignment, and document formatting ag
 ## Features
 
 - **Resume Analysis**: Compares resume text against job descriptions using keyword matching and semantic similarity to score compatibility across keywords, role relevance, and formatting.
-- **Score Delta Tracking**: Measures score improvements between baseline and tailored versions, highlighting bridged skills.
+- **Progressive Disclosure Workflow**: Displays high-level screening readiness and top-3 priority fixes upfront, with tabbed access to the full keyword matrix and coaching feedback.
+- **STAR Bullet Coaching**: Identifies passive or unquantified bullet points and provides actionable suggestions to structure accomplishments using measurable metrics and strong action verbs.
 - **Structured Resume Builder**: Edit contact details, experience, skills, and education with live preview and export to ATS-compliant DOCX (`python-docx`) and PDF (`fpdf2`).
 - **Cover Letter Generation**: Creates role-specific cover letter drafts based on resume background and target job requirements.
 - **Application Tracker**: Kanban pipeline to track applications through Applied, Screening, Interview, and Offer stages with callback rate metrics.
-- **Chrome Extension**: Chrome extension (Manifest V3) to extract job descriptions directly from LinkedIn and Indeed.
+- **Chrome Extension**: Manifest V3 extension to extract job postings directly from LinkedIn and Indeed.
 
 ---
 
