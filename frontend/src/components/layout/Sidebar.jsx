@@ -9,6 +9,7 @@ export function Sidebar({ activePage, setActivePage, openModal }) {
     { id: 'coverletter', label: 'Cover Letter Studio', icon: 'history_edu' },
     { id: 'interview', label: 'Interview Prep', icon: 'psychology' },
     { id: 'simulator', label: 'ATS Simulators', icon: 'dns' },
+    { id: 'internships', label: 'InternshipOS', icon: 'rocket_launch' },
   ];
 
   return (
