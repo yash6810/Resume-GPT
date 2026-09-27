@@ -25,6 +25,21 @@ ResumeGPT evaluates keyword coverage, role alignment, and document formatting ag
 
 ---
 
+## InternshipOS
+
+InternshipOS extends ResumeGPT from a resume optimizer into a human-in-the-loop internship application system:
+
+- Candidate profile with target roles, domains, skills, graduation year, and resume variants.
+- Job ingestion from the browser extension or manual URL/JD capture.
+- Role classification and candidate-job fit scoring.
+- Conservative eligibility checks; potential mismatches are surfaced instead of hidden.
+- Role-specific resume selection (quant, finance/data science, AI/ML, SWE).
+- Application preparation for cover letters and form answers without inventing qualifications.
+- ATS/browser assistance with a required human review checkpoint before final submission.
+- Application outcome tracking so interview/callback data can improve future targeting.
+
+The initial InternshipOS API lives under `/internships` and the UI is available from the InternshipOS navigation item. Development happens on the `feature/internshipos` branch before merging to `main`.
+
 ## Architecture
 
 ```mermaid
