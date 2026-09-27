@@ -15,6 +15,7 @@ import { JobTracker } from './pages/JobTracker/JobTracker';
 import { CoverLetterStudio } from './pages/CoverLetter/CoverLetterStudio';
 import { InterviewPrep } from './pages/InterviewPrep/InterviewPrep';
 import { AtsSimulator } from './pages/AtsSimulator/AtsSimulator';
+import { InternshipOS } from './pages/InternshipOS/InternshipOS';
 
 import { AuthModal } from './components/modals/AuthModal';
 import { AccountModal } from './components/modals/AccountModal';
@@ -60,6 +61,7 @@ export function AppContent() {
           {activePage === 'coverletter' && <CoverLetterStudio />}
           {activePage === 'interview' && <InterviewPrep />}
           {activePage === 'simulator' && <AtsSimulator />}
+          {activePage === 'internships' && <InternshipOS />}
         </main>
       </div>
 
