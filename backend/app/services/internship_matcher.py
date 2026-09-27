@@ -37,7 +37,12 @@ def match_job(candidate: CandidateProfile, job: JobCandidate) -> JobMatchRespons
 
     skill_score = min(45, len(matched) * 6)
     domain_score = 15 if any(d.lower() in job_text for d in candidate.target_domains) else 5
+    # Conservative eligibility: surface possible disqualifiers instead of silently assuming eligibility.
     eligibility = True
+    graduation = str(candidate.graduation_year or "")
+    if "graduating in 2026" in job_text and graduation != "2026": eligibility = False
+    if "graduating in 2025" in job_text and graduation != "2025": eligibility = False
+    if "2027 batch" in job_text and graduation != "2027": eligibility = False
     location_score = 10 if not candidate.location or not job.location or candidate.location.lower() in job.location.lower() else 5
     score = min(100, skill_score + role_bonus + domain_score + location_score + 5)
 
@@ -49,8 +54,8 @@ def match_job(candidate: CandidateProfile, job: JobCandidate) -> JobMatchRespons
         projects.append("Vyapar")
 
     return JobMatchResponse(
-        score=round(score, 1), eligible=eligibility, role_type=role,
+        score=round(score if eligibility else min(score, 49), 1), eligible=eligibility, role_type=role,
         matched_skills=matched, missing_skills=missing_common,
         relevant_projects=projects, recommended_resume={"quant":"quant", "financial_ds":"finance_ds", "ai_ml":"ai_ml", "swe":"swe"}.get(role, "finance_ds"),
-        reasons=[f"Role classified as {role}", f"Matched {len(matched)} profile skills", "Human review required before submission"],
+        reasons=[f"Role classified as {role}", f"Matched {len(matched)} profile skills", "Human review required before submission"] + ([] if eligibility else ["Eligibility check found a potential graduation-year mismatch"]),
     )
