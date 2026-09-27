@@ -17,6 +17,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 from app.api import (
+    internships,
     parse,
     analyze,
     rewrite,
@@ -157,6 +158,7 @@ app.include_router(
 app.include_router(ab_test.router, prefix="/ab-test", tags=["A/B Testing"])
 app.include_router(email.router, prefix="/email", tags=["Email"])
 app.include_router(billing.router, tags=["Billing & Subscriptions"])
+app.include_router(internships.router)
 
 
 from fastapi.staticfiles import StaticFiles
